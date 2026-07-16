@@ -1,0 +1,13 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+.cache/
+data/chroma_db/
+data/raw/pdfs/
+data/raw/sops/
+data/raw/csvs/
+.chainlit/
+.pytest_cache/
+*.egg-info/

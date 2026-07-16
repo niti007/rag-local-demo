@@ -1,0 +1,42 @@
+paths:
+  data_raw: data/raw
+  pdfs: data/raw/pdfs
+  sops: data/raw/sops
+  csvs: data/raw/csvs
+  chroma_db: data/chroma_db
+  embedding_cache: .cache/embeddings
+
+corpus:
+  company_name: "Cascade Bank"
+  num_pdfs: 18          # policy docs + product manuals
+  num_sops: 8           # SOP-structured PDFs
+  num_csvs: 5
+  seed: 42
+
+chunking:
+  chunk_size: 500       # tokens (tiktoken cl100k_base)
+  chunk_overlap: 100    # tokens
+  encoding: cl100k_base
+
+embedding:
+  model: BAAI/bge-small-en-v1.5
+  dim: 384
+  batch_size: 64
+  query_prefix: ""      # bge query prefix if needed
+
+vector_store:
+  collection: cascade_docs
+
+search:
+  top_k: 10
+
+rerank:
+  model: cross-encoder/ms-marco-MiniLM-L-6-v2
+  top_n: 4
+
+generation:
+  provider: openrouter
+  base_url: https://openrouter.ai/api/v1
+  model: openai/gpt-4o-mini
+  temperature: 0.2
+  max_tokens: 800

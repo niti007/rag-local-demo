@@ -25,12 +25,39 @@ Design notes:
 
 from __future__ import annotations
 
+import threading
+
 import chainlit as cl
 from chainlit.input_widget import Select, Slider, Switch
 
 from src.config import get_config
 
 DOC_TYPE_OPTIONS = ["all", "pdf", "sop", "csv"]
+
+# Start loading the local models (embedder + cross-encoder) in a background
+# thread the moment the server process boots, so they're warm by the time the
+# user sends their first query. On CPU this cold-load can take a couple of
+# minutes; doing it here (not on first message) keeps the chat responsive.
+_MODELS_READY = threading.Event()
+
+
+def _warm_models() -> None:
+    """Force the lazy model singletons to load (blocking; run off the event loop)."""
+    from src.embed.local_embedder import embed_query
+    from src.rerank.cross_encoder_rerank import get_reranker
+
+    embed_query("warmup")
+    get_reranker().predict([("warmup", "warmup")])
+
+
+def _bg_warm() -> None:
+    try:
+        _warm_models()
+    finally:
+        _MODELS_READY.set()
+
+
+threading.Thread(target=_bg_warm, name="model-warmup", daemon=True).start()
 
 
 def _doc_type_for_query(doc_type: str | None) -> str | None:
@@ -174,6 +201,18 @@ async def on_chat_start() -> None:
     )
 
     await cl.Message(content=WELCOME_MD + "\n---\n" + key_note).send()
+
+    # Models begin loading at server boot (see _bg_warm). Here we just wait for
+    # that to finish so the user's first query isn't blocked mid-request.
+    if not _MODELS_READY.is_set():
+        warm = cl.Message(
+            content="⏳ Loading local models (embedder + reranker)… first load can "
+            "take a couple of minutes on CPU. Subsequent queries are fast."
+        )
+        await warm.send()
+        await cl.make_async(_MODELS_READY.wait)()
+        warm.content = "✅ Models ready. Ask a question, or type `/inspect`."
+        await warm.update()
 
 
 @cl.on_settings_update

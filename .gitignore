@@ -11,3 +11,5 @@ data/raw/csvs/
 .chainlit/
 .pytest_cache/
 *.egg-info/
+chainlit_run.log
+*.log

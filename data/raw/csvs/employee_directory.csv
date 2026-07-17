@@ -1,0 +1,51 @@
+employee_id,name,role,department,branch,email,hire_date
+EMP00001,Sean Blake,Teller,Risk Management,East Jill Branch,helenpeterson@cascadebank-demo.example,2017-03-08
+EMP00002,Phillip Garcia,Compliance Analyst,Compliance,Robinsonshire Branch,wdavis@cascadebank-demo.example,2024-10-22
+EMP00003,Andrew Stevens,Branch Manager,Treasury,North Judithbury Branch,dudleynicholas@cascadebank-demo.example,2023-12-06
+EMP00004,Mark Mcclure,Marketing Specialist,Marketing,North Judithbury Branch,barbara10@cascadebank-demo.example,2025-10-14
+EMP00005,Dylan Miller,Teller,Commercial Banking,East Jill Branch,michellejames@cascadebank-demo.example,2022-04-02
+EMP00006,Holly Wood,Compliance Analyst,Treasury,Lake Debra Branch,elizabethmiles@cascadebank-demo.example,2026-03-02
+EMP00007,Lisa Jackson,Teller,Treasury,East Jill Branch,frankgray@cascadebank-demo.example,2025-06-04
+EMP00008,Colleen Nguyen,Assistant Branch Manager,Treasury,East Jessetown Branch,perezantonio@cascadebank-demo.example,2019-11-27
+EMP00009,Austin Gentry,Compliance Analyst,Human Resources,Lake Debra Branch,jason76@cascadebank-demo.example,2025-06-22
+EMP00010,Derek Wright,Customer Service Representative,Retail Banking,East Jill Branch,julie69@cascadebank-demo.example,2021-05-01
+EMP00011,Zachary Taylor,Assistant Branch Manager,Marketing,New Roberttown Branch,ddavis@cascadebank-demo.example,2016-05-27
+EMP00012,Christopher Becker,Customer Service Representative,Compliance,East Jill Branch,cruzcaitlin@cascadebank-demo.example,2022-07-02
+EMP00013,Tricia Valencia,IT Support Specialist,Commercial Banking,North Judithbury Branch,frazierdanny@cascadebank-demo.example,2023-09-03
+EMP00014,Patricia Peterson,Financial Advisor,Commercial Banking,New Roberttown Branch,ryan70@cascadebank-demo.example,2019-01-07
+EMP00015,Pamela Romero,IT Support Specialist,Risk Management,North Judithbury Branch,harrellkenneth@cascadebank-demo.example,2025-05-29
+EMP00016,Christina Brooks,Assistant Branch Manager,Human Resources,Lake Debra Branch,amberosborne@cascadebank-demo.example,2023-07-24
+EMP00017,Linda Burns,Branch Manager,Marketing,North Judithbury Branch,hickmannatasha@cascadebank-demo.example,2019-10-08
+EMP00018,David Bradley,Risk Analyst,Risk Management,Robinsonshire Branch,millertodd@cascadebank-demo.example,2015-09-19
+EMP00019,Kim Martinez,Marketing Specialist,Operations,Lake Debra Branch,karroyo@cascadebank-demo.example,2019-01-18
+EMP00020,Lisa Brandt,Compliance Analyst,Commercial Banking,North Judithbury Branch,jenniferross@cascadebank-demo.example,2025-12-18
+EMP00021,Jessica Holmes,Head Teller,Information Technology,New Roberttown Branch,wrightcaleb@cascadebank-demo.example,2014-11-23
+EMP00022,Crystal Robinson,Branch Manager,Information Technology,North Judithbury Branch,zimmermanbrian@cascadebank-demo.example,2015-09-07
+EMP00023,Shannon Jones,Financial Advisor,Risk Management,East Jessetown Branch,joshuawashington@cascadebank-demo.example,2023-09-17
+EMP00024,Timothy Duncan,Head Teller,Operations,East Jill Branch,esanchez@cascadebank-demo.example,2021-06-18
+EMP00025,Brent Jordan,IT Support Specialist,Operations,East Jill Branch,ujenkins@cascadebank-demo.example,2015-06-17
+EMP00026,Victoria Garcia,Head Teller,Risk Management,Robinsonshire Branch,zchandler@cascadebank-demo.example,2016-05-24
+EMP00027,Connor West,Head Teller,Commercial Banking,Lake Debra Branch,dwhite@cascadebank-demo.example,2018-10-15
+EMP00028,Angela Morton,Head Teller,Compliance,Lake Debra Branch,williamsyvette@cascadebank-demo.example,2014-10-15
+EMP00029,Tammy Allison,Assistant Branch Manager,Information Technology,East Jill Branch,richardolson@cascadebank-demo.example,2021-05-11
+EMP00030,Carmen Smith,Operations Manager,Marketing,New Roberttown Branch,ybaker@cascadebank-demo.example,2022-04-12
+EMP00031,Michael Cross,Head Teller,Treasury,East Jill Branch,smoore@cascadebank-demo.example,2018-03-29
+EMP00032,Lauren Daniels,Head Teller,Operations,North Judithbury Branch,brian97@cascadebank-demo.example,2023-02-03
+EMP00033,Kim Brown,Compliance Analyst,Retail Banking,New Roberttown Branch,yorkcasey@cascadebank-demo.example,2015-09-11
+EMP00034,Cynthia Wilson,Financial Advisor,Risk Management,North Judithbury Branch,bethwilliams@cascadebank-demo.example,2015-12-07
+EMP00035,Kevin Mills,Compliance Analyst,Operations,East Jill Branch,james53@cascadebank-demo.example,2019-01-21
+EMP00036,Michael Evans,Head Teller,Human Resources,East Jessetown Branch,sarah10@cascadebank-demo.example,2022-05-02
+EMP00037,Kristine Garcia,Head Teller,Human Resources,East Jill Branch,williamanderson@cascadebank-demo.example,2020-06-22
+EMP00038,Sherry Wood,Customer Service Representative,Compliance,East Jill Branch,samueldaniels@cascadebank-demo.example,2019-09-07
+EMP00039,Victoria Valdez,Assistant Branch Manager,Treasury,Lake Debra Branch,contrerasangela@cascadebank-demo.example,2025-10-28
+EMP00040,Shawn Baker,Customer Service Representative,Marketing,Lake Debra Branch,newtoneric@cascadebank-demo.example,2019-05-01
+EMP00041,Michelle Harris,Financial Advisor,Operations,East Jill Branch,william40@cascadebank-demo.example,2016-02-09
+EMP00042,Sandra Williams,Loan Officer,Treasury,East Jessetown Branch,kellie42@cascadebank-demo.example,2022-01-20
+EMP00043,Jessica Smith,Branch Manager,Retail Banking,North Judithbury Branch,landryhannah@cascadebank-demo.example,2017-01-27
+EMP00044,Sandra Aguilar,Loan Officer,Compliance,Robinsonshire Branch,russellwilliams@cascadebank-demo.example,2020-09-27
+EMP00045,Rebecca Valencia,Financial Advisor,Commercial Banking,East Jessetown Branch,jason31@cascadebank-demo.example,2020-07-21
+EMP00046,Stacey Russell,Financial Advisor,Human Resources,Lake Debra Branch,sarayoung@cascadebank-demo.example,2017-04-20
+EMP00047,Rita Keith,Customer Service Representative,Treasury,North Judithbury Branch,whitesandra@cascadebank-demo.example,2021-07-17
+EMP00048,Sharon Cochran,Head Teller,Commercial Banking,Robinsonshire Branch,erik16@cascadebank-demo.example,2015-03-13
+EMP00049,Courtney Velasquez,Risk Analyst,Risk Management,Robinsonshire Branch,ybailey@cascadebank-demo.example,2018-05-30
+EMP00050,Matthew Ross,IT Support Specialist,Commercial Banking,New Roberttown Branch,michelle45@cascadebank-demo.example,2025-06-14

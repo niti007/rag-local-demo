@@ -1,0 +1,153 @@
+loan_id,customer_name,loan_type,principal,interest_rate,term_months,status
+LN000001,Madison Marshall,Auto Loan,23594.2,8.026,48,Current
+LN000002,Marie Wilson,Auto Loan,23638.29,8.335,48,Charged Off
+LN000003,Andrew Ferrell,HELOC,67774.85,6.786,120,Current
+LN000004,David Medina,Auto Loan,21259.77,7.38,60,Charged Off
+LN000005,Jacob Avery,Personal Loan,4143.78,6.464,24,Current
+LN000006,Kimberly Matthews,HELOC,94409.09,4.941,60,Paid Off
+LN000007,Stacey Pena,Student Loan,68787.8,5.397,120,Paid Off
+LN000008,Lisa Crosby,Personal Loan,11308.39,7.906,12,Current
+LN000009,Michael Robinson,Student Loan,16145.04,7.572,180,Delinquent
+LN000010,David Cox,Student Loan,24428.75,5.76,120,Paid Off
+LN000011,Mrs. Stephanie Newman,Business Loan,241131.47,6.851,60,Current
+LN000012,Donald Donaldson,Business Loan,241011.97,9.57,84,Current
+LN000013,Samantha Davis,Auto Loan,27276.66,3.774,72,Paid Off
+LN000014,Mark Maddox,Student Loan,18862.66,5.767,180,Current
+LN000015,Gavin Zhang,Student Loan,44669.92,3.981,120,Current
+LN000016,Christine Gallegos,HELOC,126670.78,6.753,120,In Review
+LN000017,Laurie Li,Personal Loan,9749.11,14.699,48,Current
+LN000018,Raymond Kramer,Business Loan,238502.06,6.016,60,Delinquent
+LN000019,Destiny Riggs,Business Loan,104263.17,10.942,120,In Review
+LN000020,Ms. Rebecca Rodriguez,HELOC,14735.33,8.726,60,Delinquent
+LN000021,Bonnie Howard,Mortgage,356302.79,4.041,360,Delinquent
+LN000022,Leah Smith,Mortgage,226542.18,4.679,240,Current
+LN000023,Cameron Fisher,Student Loan,93720.85,6.296,180,Current
+LN000024,Arthur West,HELOC,87230.1,4.084,60,Delinquent
+LN000025,Kevin Hayes,HELOC,146847.11,6.511,60,Delinquent
+LN000026,Luis Acosta,Business Loan,405991.33,5.642,36,Current
+LN000027,Mary Turner,Auto Loan,20530.38,8.391,60,Current
+LN000028,Amanda Lutz,Business Loan,53324.33,7.754,84,Current
+LN000029,Jessica Rodriguez,Student Loan,26456.44,7.14,240,Current
+LN000030,Jill Lam,Student Loan,77160.66,5.026,120,Current
+LN000031,Charles Martinez,Business Loan,42215.75,9.217,24,Current
+LN000032,Lauren Joseph,Business Loan,327780.01,8.395,60,Paid Off
+LN000033,Kyle Phillips,Mortgage,679510.11,4.034,180,Charged Off
+LN000034,Jessica Mcguire,Student Loan,89317.66,4.355,180,Charged Off
+LN000035,Matthew Rich,Student Loan,92930.56,5.818,240,Current
+LN000036,Sharon Jordan,Personal Loan,1532.38,11.283,24,Paid Off
+LN000037,Jennifer Wilcox,Student Loan,82985.73,4.496,120,Current
+LN000038,Nicholas Edwards,HELOC,126851.08,7.385,120,Current
+LN000039,David Mckay,Business Loan,381470.49,9.743,36,Delinquent
+LN000040,Kara Davis,Mortgage,415531.21,3.242,240,Current
+LN000041,Jeffrey Garner,Mortgage,308197.14,7.297,360,Current
+LN000042,Carlos Brown,Personal Loan,2007.27,13.052,36,Current
+LN000043,Kristina Santiago,Auto Loan,26502.18,6.091,72,Delinquent
+LN000044,Shane Pugh,Student Loan,41106.91,4.477,240,Current
+LN000045,Thomas Williams,Mortgage,134965.47,4.71,180,Paid Off
+LN000046,Erik Garcia,Auto Loan,46462.08,5.664,60,Current
+LN000047,Brittney Olson,Personal Loan,16121.02,6.92,36,Current
+LN000048,Hayley Hawkins,Business Loan,232689.18,8.075,120,Current
+LN000049,Donald Perez,Mortgage,317122.57,5.686,180,Paid Off
+LN000050,Justin Saunders,Business Loan,20985.2,7.327,84,Current
+LN000051,Megan Hawkins,HELOC,136729.06,6.86,60,Current
+LN000052,Mary Steele,Business Loan,97208.35,6.807,60,Current
+LN000053,Donald Farmer,Mortgage,192028.96,4.895,240,Current
+LN000054,Heather White,Mortgage,321953.69,6.244,180,Current
+LN000055,Matthew Jones,HELOC,37376.75,4.677,60,Current
+LN000056,Valerie Davis,Business Loan,176125.35,7.279,120,Paid Off
+LN000057,Jamie Chavez,Business Loan,177347.07,5.817,120,Current
+LN000058,Eric Nguyen,Student Loan,24080.89,3.888,180,Current
+LN000059,Linda Ware,Personal Loan,10909.24,14.71,48,Paid Off
+LN000060,Paul Williams,Personal Loan,13785.88,9.285,48,In Review
+LN000061,Jeremy Coleman,Auto Loan,38795.81,7.59,48,Current
+LN000062,Jennifer Lewis,Student Loan,48854.11,4.048,240,Paid Off
+LN000063,Haley Rodriguez,Student Loan,11570.07,6.365,180,Current
+LN000064,Leslie Rose,Personal Loan,9228.72,12.437,24,Paid Off
+LN000065,Daniel Joyce,Mortgage,380874.7,5.157,360,Current
+LN000066,Dan Dougherty,HELOC,139289.41,6.092,180,Current
+LN000067,Pamela Roberts,Personal Loan,24855.57,11.344,60,Charged Off
+LN000068,Jonathan Jordan,Mortgage,595199.21,5.991,360,Current
+LN000069,Joseph Hall,HELOC,16201.54,7.387,180,Current
+LN000070,Mary Gomez,Personal Loan,33834.37,6.954,48,Current
+LN000071,Patrick Graham,Auto Loan,34555.16,6.175,48,Current
+LN000072,Blake Edwards,Student Loan,60916.05,3.754,240,In Review
+LN000073,Jared Bowman,Business Loan,65706.44,10.523,84,Current
+LN000074,Jared Burch,Student Loan,18459.14,4.715,180,Paid Off
+LN000075,Travis Stevens,HELOC,77609.64,4.488,120,Delinquent
+LN000076,Heidi Kim,Business Loan,169671.09,5.268,60,Delinquent
+LN000077,Jeffrey Morales,Mortgage,648950.61,3.492,360,Paid Off
+LN000078,Seth Reese,Student Loan,28171.73,5.76,120,Current
+LN000079,Richard Jones,Business Loan,479854.37,9.787,36,Current
+LN000080,Kerry Lee,Auto Loan,41304.9,5.873,72,Delinquent
+LN000081,Heather Mullen,Auto Loan,31377.9,5.833,72,Delinquent
+LN000082,Brittany Garcia,Auto Loan,22473.93,6.964,36,Paid Off
+LN000083,Christopher Hernandez,HELOC,36174.38,4.985,120,Current
+LN000084,Angela Bean,Student Loan,86950.47,7.83,240,Current
+LN000085,Julie Elliott,Business Loan,311484.58,5.685,120,Current
+LN000086,Melanie Macias,Business Loan,314420.9,10.512,60,Current
+LN000087,Victoria Morris,Student Loan,17725.04,4.193,120,Current
+LN000088,Emily Gonzales,Personal Loan,24576.84,9.496,60,Current
+LN000089,Mark Hogan,HELOC,63719.39,6.433,60,Current
+LN000090,Heather Jones,Student Loan,93416.02,5.775,120,Current
+LN000091,Andrew Wood,Auto Loan,17729.13,7.216,72,Paid Off
+LN000092,Matthew Madden,Mortgage,404687.98,6.668,180,In Review
+LN000093,Kirk Cruz,HELOC,101429.77,7.423,120,Current
+LN000094,Tiffany Stevenson,Business Loan,252019.26,8.392,24,Paid Off
+LN000095,Terry Armstrong,Auto Loan,23188.68,4.849,60,Current
+LN000096,Larry Mason,Business Loan,289340.47,8.298,84,Current
+LN000097,Joanna Shepherd,Mortgage,259485.57,6.705,360,Current
+LN000098,Vickie Miller,Mortgage,589202.77,5.459,240,In Review
+LN000099,Amanda Zimmerman,Mortgage,573112.43,6.381,360,Current
+LN000100,Kelly Bishop MD,Mortgage,381320.67,6.88,240,Current
+LN000101,Jasmine Schroeder,Mortgage,599673.21,3.944,180,Delinquent
+LN000102,Amy Mccoy,Student Loan,38309.93,6.051,240,Current
+LN000103,Gary Grant,HELOC,29492.9,8.068,60,Paid Off
+LN000104,David York,HELOC,59114.17,6.984,120,Current
+LN000105,Lindsey Hernandez,Student Loan,32800.3,4.337,240,Paid Off
+LN000106,Matthew Rangel,Student Loan,82442.19,7.814,120,Paid Off
+LN000107,Matthew Bates,Mortgage,744965.77,3.571,360,Paid Off
+LN000108,Michael Miller,Auto Loan,15604.66,8.471,60,Paid Off
+LN000109,Maria Murphy,Student Loan,42306.57,5.887,120,Current
+LN000110,Michael Valentine,Business Loan,196958.58,8.802,24,Paid Off
+LN000111,Susan Davis DDS,Mortgage,349910.02,4.252,360,In Review
+LN000112,Alicia Parker,Personal Loan,16459.65,8.946,48,Current
+LN000113,Gloria Miranda,Student Loan,13848.46,6.174,180,Delinquent
+LN000114,Zachary Moore,Mortgage,613104.21,3.98,240,Current
+LN000115,Richard Romero,Auto Loan,33725.18,8.47,60,Current
+LN000116,Nancy Rose,HELOC,28283.2,7.942,120,Paid Off
+LN000117,Sherri Williamson,Mortgage,110781.76,6.528,360,Current
+LN000118,Brittany White,Mortgage,702720.03,4.986,180,Current
+LN000119,Lori Orr,Business Loan,113124.33,10.293,36,Current
+LN000120,Amanda Diaz,Personal Loan,4173.56,8.254,36,Current
+LN000121,Tracy Bishop,Student Loan,20724.88,6.128,180,Delinquent
+LN000122,Rachel Young,Auto Loan,30320.01,7.722,36,Current
+LN000123,Vincent Mueller,Business Loan,52800.28,6.357,120,Delinquent
+LN000124,Cheyenne Gregory,Mortgage,85401.92,6.677,240,In Review
+LN000125,Jessica Hammond,Business Loan,351605.04,5.425,84,Current
+LN000126,Kathryn Barnes,Student Loan,81565.9,4.567,120,Paid Off
+LN000127,Curtis Jacobs,Auto Loan,27901.49,7.349,48,Delinquent
+LN000128,Amy Castillo,Mortgage,435440.55,5.746,180,Current
+LN000129,Timothy Dawson,Personal Loan,25562.69,14.279,24,Current
+LN000130,Belinda Miller,Business Loan,432081.82,10.38,24,Current
+LN000131,Jerry Palmer,Mortgage,475014.52,4.582,240,Current
+LN000132,Anna Lozano,Auto Loan,20884.89,4.989,36,Current
+LN000133,Stacey Arias,Student Loan,62721.34,3.134,240,Paid Off
+LN000134,James Brooks,Personal Loan,7985.15,10.586,60,Delinquent
+LN000135,Brad Walker,Personal Loan,22969.77,10.454,24,Current
+LN000136,Brett Espinoza,Business Loan,324469.93,8.17,24,In Review
+LN000137,Charles Johnson,Personal Loan,32753.43,9.482,24,Paid Off
+LN000138,Kaitlyn Guerra,Business Loan,192225.04,9.576,36,In Review
+LN000139,Julie Gilbert,Mortgage,91181.9,3.062,180,Current
+LN000140,Alicia Lewis,Mortgage,715615.6,5.28,240,Current
+LN000141,Todd Lynch,HELOC,117395.4,7.509,120,Current
+LN000142,Ricardo Young,HELOC,85271.75,5.387,60,Current
+LN000143,David Fowler,HELOC,138929.48,6.682,60,Current
+LN000144,Amy Copeland,Student Loan,77506.29,6.405,240,Current
+LN000145,Mr. Mark Andrews DDS,Student Loan,46561.17,3.29,120,Current
+LN000146,Aaron Gomez,Business Loan,71253.49,8.653,120,Current
+LN000147,Chelsea Barnett,Student Loan,67514.97,3.597,120,Delinquent
+LN000148,Heather Ashley,Student Loan,6078.31,7.765,180,Current
+LN000149,Rachel Romero,Student Loan,29628.46,3.635,180,Paid Off
+LN000150,Shane Williams,Personal Loan,25919.82,12.943,12,Current
+LN000151,James Burgess,Business Loan,146910.59,6.578,24,In Review
+LN000152,Austin Allen,Student Loan,12321.65,5.554,180,Current

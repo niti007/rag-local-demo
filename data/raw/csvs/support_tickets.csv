@@ -1,0 +1,103 @@
+ticket_id,opened_date,customer_name,category,priority,status,summary
+TCK000001,2026-05-06,Diana Bean,Fraud Report,Medium,Open,Customer disputes a recent charge tied to fraud report.
+TCK000002,2025-12-25,Bradley Smith,Dispute,Medium,Closed,Inbound call regarding dispute; agent gathered details for review.
+TCK000003,2026-02-09,Trevor Walker,Account Access,High,Closed,Customer submitted a request related to account access via the mobile app.
+TCK000004,2025-08-10,Marissa Webster,Loan Inquiry,Low,Open,Customer disputes a recent charge tied to loan inquiry.
+TCK000005,2025-10-19,Alex Hernandez,Mobile App Bug,Urgent,Closed,Branch staff escalated a mobile app bug case for further investigation.
+TCK000006,2025-09-02,Brian Gould,Fee Inquiry,Low,In Progress,Customer disputes a recent charge tied to fee inquiry.
+TCK000007,2026-01-11,Pamela Jackson,Fraud Report,Urgent,Closed,Customer reported an issue with fraud report and requested follow-up.
+TCK000008,2026-03-07,Michelle Strickland,Fraud Report,Medium,In Progress,Inbound call regarding fraud report; agent gathered details for review.
+TCK000009,2025-09-16,Ashley Johnson,Fee Inquiry,Low,Open,Customer disputes a recent charge tied to fee inquiry.
+TCK000010,2025-11-13,Susan Brooks,Loan Inquiry,Medium,In Progress,Customer submitted a request related to loan inquiry via the mobile app.
+TCK000011,2026-07-15,Angela Vaughn,Fraud Report,High,Resolved,Inbound call regarding fraud report; agent gathered details for review.
+TCK000012,2026-03-15,Michael Turner,Card Issue,Medium,Resolved,Customer submitted a request related to card issue via the mobile app.
+TCK000013,2026-04-06,Barbara Riggs,Loan Inquiry,Low,In Progress,Customer submitted a request related to loan inquiry via the mobile app.
+TCK000014,2026-05-14,Joseph Stanley,Loan Inquiry,High,Open,Inbound call regarding loan inquiry; agent gathered details for review.
+TCK000015,2025-08-10,Gloria Atkinson,Account Access,Low,Resolved,Customer reported an issue with account access and requested follow-up.
+TCK000016,2026-05-30,Jeffrey Cox PhD,Dispute,Urgent,Open,Customer disputes a recent charge tied to dispute.
+TCK000017,2026-01-09,Jessica Gross,Other,High,Resolved,Customer disputes a recent charge tied to other.
+TCK000018,2026-03-24,Robert Medina,Other,Urgent,Resolved,Inbound call regarding other; agent gathered details for review.
+TCK000019,2026-01-18,Roger Vargas,Other,Low,In Progress,Customer reported an issue with other and requested follow-up.
+TCK000020,2025-11-17,Sandra Miller,Other,Urgent,Closed,Branch staff escalated a other case for further investigation.
+TCK000021,2026-06-22,Paul Hudson,Dispute,Medium,Resolved,Customer submitted a request related to dispute via the mobile app.
+TCK000022,2026-03-31,Allen Rosales,Fraud Report,Urgent,In Progress,Customer submitted a request related to fraud report via the mobile app.
+TCK000023,2025-09-23,Mr. David Ramirez,Fraud Report,Low,Resolved,Customer disputes a recent charge tied to fraud report.
+TCK000024,2026-03-03,Desiree Smith,Dispute,Low,Resolved,Branch staff escalated a dispute case for further investigation.
+TCK000025,2025-09-27,Nathan Freeman,Other,Medium,Open,Inbound call regarding other; agent gathered details for review.
+TCK000026,2026-05-05,John Joseph,Account Access,Urgent,Closed,Customer submitted a request related to account access via the mobile app.
+TCK000027,2026-01-05,Anna Walker,Dispute,High,Resolved,Inbound call regarding dispute; agent gathered details for review.
+TCK000028,2026-04-09,Matthew Wood,Dispute,Urgent,Closed,Inbound call regarding dispute; agent gathered details for review.
+TCK000029,2026-02-14,Jessica Reese,Other,Urgent,Open,Customer submitted a request related to other via the mobile app.
+TCK000030,2025-11-20,Jesse Parker,Card Issue,Urgent,In Progress,Branch staff escalated a card issue case for further investigation.
+TCK000031,2025-10-12,Corey Wilson,Dispute,High,Open,Customer disputes a recent charge tied to dispute.
+TCK000032,2026-02-08,Melissa Lee,Account Access,Urgent,Closed,Customer submitted a request related to account access via the mobile app.
+TCK000033,2026-04-27,Dr. William Warren,Mobile App Bug,Low,Open,Customer disputes a recent charge tied to mobile app bug.
+TCK000034,2025-11-01,Dr. Elizabeth Ward,Fee Inquiry,High,Resolved,Inbound call regarding fee inquiry; agent gathered details for review.
+TCK000035,2025-11-09,Joseph Hill,Fee Inquiry,Low,Closed,Customer submitted a request related to fee inquiry via the mobile app.
+TCK000036,2025-08-05,Melissa Martinez,Account Access,Medium,Resolved,Customer disputes a recent charge tied to account access.
+TCK000037,2026-06-17,Ashley Smith,Mobile App Bug,Urgent,Closed,Customer reported an issue with mobile app bug and requested follow-up.
+TCK000038,2025-11-02,Jeremiah Lopez,Mobile App Bug,Low,In Progress,Customer disputes a recent charge tied to mobile app bug.
+TCK000039,2025-08-03,Scott Wilson,Card Issue,High,Resolved,Branch staff escalated a card issue case for further investigation.
+TCK000040,2025-08-09,Benjamin Soto,Fraud Report,Medium,Closed,Inbound call regarding fraud report; agent gathered details for review.
+TCK000041,2025-08-04,Robert Avery,Account Access,Low,In Progress,Customer reported an issue with account access and requested follow-up.
+TCK000042,2025-08-17,Bailey Duran DDS,Fraud Report,Urgent,In Progress,Branch staff escalated a fraud report case for further investigation.
+TCK000043,2026-05-18,Patricia James,Loan Inquiry,High,In Progress,Customer submitted a request related to loan inquiry via the mobile app.
+TCK000044,2026-07-02,Scott Branch,Fee Inquiry,High,Resolved,Customer disputes a recent charge tied to fee inquiry.
+TCK000045,2025-11-10,Amy Choi,Other,High,Closed,Customer disputes a recent charge tied to other.
+TCK000046,2025-08-22,Christine Clark,Account Access,High,Open,Customer submitted a request related to account access via the mobile app.
+TCK000047,2026-03-28,David Arnold,Fee Inquiry,High,Open,Customer disputes a recent charge tied to fee inquiry.
+TCK000048,2025-09-13,Jerry Wheeler,Other,Medium,Open,Customer submitted a request related to other via the mobile app.
+TCK000049,2025-11-05,Dwayne Campbell,Other,Urgent,In Progress,Inbound call regarding other; agent gathered details for review.
+TCK000050,2026-06-13,Michael Bradshaw,Dispute,Low,In Progress,Customer reported an issue with dispute and requested follow-up.
+TCK000051,2026-05-16,Leah Lara,Account Access,High,Closed,Branch staff escalated a account access case for further investigation.
+TCK000052,2025-09-29,Joshua Holland,Loan Inquiry,Medium,Closed,Branch staff escalated a loan inquiry case for further investigation.
+TCK000053,2026-07-02,Charles Brown,Other,Medium,In Progress,Customer reported an issue with other and requested follow-up.
+TCK000054,2026-05-18,Paul Carroll,Fraud Report,Urgent,Resolved,Branch staff escalated a fraud report case for further investigation.
+TCK000055,2025-11-04,John Torres,Loan Inquiry,High,Resolved,Branch staff escalated a loan inquiry case for further investigation.
+TCK000056,2025-12-18,Kathryn Snyder,Mobile App Bug,Urgent,In Progress,Customer disputes a recent charge tied to mobile app bug.
+TCK000057,2025-08-15,Stacy Navarro,Dispute,High,In Progress,Customer submitted a request related to dispute via the mobile app.
+TCK000058,2026-03-06,Brandon Hayden,Mobile App Bug,Medium,Closed,Customer submitted a request related to mobile app bug via the mobile app.
+TCK000059,2026-06-04,Laurie Smith,Fraud Report,High,Resolved,Branch staff escalated a fraud report case for further investigation.
+TCK000060,2026-05-08,Debra Williams,Mobile App Bug,Urgent,Closed,Customer reported an issue with mobile app bug and requested follow-up.
+TCK000061,2026-05-04,Joseph Ramos,Fraud Report,High,Open,Inbound call regarding fraud report; agent gathered details for review.
+TCK000062,2025-10-31,Kevin Walters,Mobile App Bug,High,Closed,Customer reported an issue with mobile app bug and requested follow-up.
+TCK000063,2026-01-21,Julie Ortiz,Mobile App Bug,Medium,In Progress,Branch staff escalated a mobile app bug case for further investigation.
+TCK000064,2025-11-16,Shannon Rivera,Mobile App Bug,High,In Progress,Customer disputes a recent charge tied to mobile app bug.
+TCK000065,2026-04-10,Matthew Morales DDS,Card Issue,Medium,In Progress,Customer disputes a recent charge tied to card issue.
+TCK000066,2025-07-29,Ernest Morris,Account Access,Medium,In Progress,Customer disputes a recent charge tied to account access.
+TCK000067,2026-05-11,Jose Travis,Account Access,Urgent,Resolved,Customer reported an issue with account access and requested follow-up.
+TCK000068,2026-03-27,Julia Brown,Other,Medium,Open,Customer reported an issue with other and requested follow-up.
+TCK000069,2026-02-01,Peter Garrett,Loan Inquiry,Urgent,Closed,Branch staff escalated a loan inquiry case for further investigation.
+TCK000070,2026-05-06,Derek Anderson,Dispute,High,Resolved,Customer submitted a request related to dispute via the mobile app.
+TCK000071,2025-11-03,Michael Martinez,Account Access,Medium,Open,Customer reported an issue with account access and requested follow-up.
+TCK000072,2026-03-16,Cynthia Moore,Loan Inquiry,Medium,Open,Branch staff escalated a loan inquiry case for further investigation.
+TCK000073,2026-02-13,Jason Walker,Fee Inquiry,Medium,Resolved,Branch staff escalated a fee inquiry case for further investigation.
+TCK000074,2026-06-06,Julia Wilson,Account Access,High,Open,Customer reported an issue with account access and requested follow-up.
+TCK000075,2026-06-03,Timothy Carter,Fraud Report,Urgent,Closed,Customer submitted a request related to fraud report via the mobile app.
+TCK000076,2026-04-14,Ruben Baird,Loan Inquiry,Urgent,Resolved,Customer disputes a recent charge tied to loan inquiry.
+TCK000077,2025-10-17,Charles Lee,Dispute,High,In Progress,Customer reported an issue with dispute and requested follow-up.
+TCK000078,2026-03-04,Sherry Shields,Other,Medium,Open,Customer submitted a request related to other via the mobile app.
+TCK000079,2025-10-30,Sarah Morgan,Fraud Report,Medium,In Progress,Customer submitted a request related to fraud report via the mobile app.
+TCK000080,2026-05-16,Samantha Campbell,Fee Inquiry,High,Open,Branch staff escalated a fee inquiry case for further investigation.
+TCK000081,2025-11-07,Lauren Keller,Fee Inquiry,Medium,In Progress,Customer reported an issue with fee inquiry and requested follow-up.
+TCK000082,2026-06-16,Joshua Reed,Other,Medium,Open,Customer submitted a request related to other via the mobile app.
+TCK000083,2026-02-14,Jamie Cantu,Mobile App Bug,Medium,Closed,Branch staff escalated a mobile app bug case for further investigation.
+TCK000084,2026-06-17,Michael Armstrong,Mobile App Bug,High,Open,Customer submitted a request related to mobile app bug via the mobile app.
+TCK000085,2025-10-13,Jennifer Flores,Mobile App Bug,Medium,Open,Customer submitted a request related to mobile app bug via the mobile app.
+TCK000086,2026-01-14,Roberta Hughes,Card Issue,High,In Progress,Branch staff escalated a card issue case for further investigation.
+TCK000087,2026-03-29,Marissa Hernandez,Fee Inquiry,High,Open,Customer disputes a recent charge tied to fee inquiry.
+TCK000088,2025-07-29,Vincent Rivera,Mobile App Bug,Medium,In Progress,Customer submitted a request related to mobile app bug via the mobile app.
+TCK000089,2025-08-22,Jessica Fox,Loan Inquiry,Medium,Closed,Branch staff escalated a loan inquiry case for further investigation.
+TCK000090,2026-01-08,Charles Pitts,Fraud Report,Urgent,In Progress,Branch staff escalated a fraud report case for further investigation.
+TCK000091,2025-09-12,Richard Baker,Dispute,Low,Closed,Customer disputes a recent charge tied to dispute.
+TCK000092,2026-03-14,Marie Christian,Fraud Report,Low,Open,Customer reported an issue with fraud report and requested follow-up.
+TCK000093,2026-06-11,Kimberly Finley,Dispute,Medium,In Progress,Customer disputes a recent charge tied to dispute.
+TCK000094,2026-03-15,Olivia Brennan,Fraud Report,Urgent,Open,Customer disputes a recent charge tied to fraud report.
+TCK000095,2025-07-28,Cynthia Cohen,Dispute,Urgent,Open,Customer disputes a recent charge tied to dispute.
+TCK000096,2025-11-03,Nicole Hamilton MD,Other,Urgent,In Progress,Customer reported an issue with other and requested follow-up.
+TCK000097,2026-03-18,Ashlee Jackson,Fee Inquiry,Low,Closed,Branch staff escalated a fee inquiry case for further investigation.
+TCK000098,2025-11-08,Amber Flynn,Mobile App Bug,Urgent,Resolved,Customer reported an issue with mobile app bug and requested follow-up.
+TCK000099,2025-11-05,Jeffrey Sanchez,Account Access,Low,Open,Inbound call regarding account access; agent gathered details for review.
+TCK000100,2025-12-22,Rebecca Jackson,Fee Inquiry,Low,Open,Customer submitted a request related to fee inquiry via the mobile app.
+TCK000101,2025-08-14,Janet Vega,Card Issue,Low,Resolved,Branch staff escalated a card issue case for further investigation.
+TCK000102,2026-01-24,Briana Murray,Fee Inquiry,Medium,Closed,Inbound call regarding fee inquiry; agent gathered details for review.

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cascade Bank RAG — Architecture</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0f1117;
+    --bg2:       #181c27;
+    --bg3:       #1e2332;
+    --border:    rgba(255,255,255,0.08);
+    --border2:   rgba(255,255,255,0.14);
+    --text:      #e2e4ed;
+    --muted:     #7c8099;
+    --purple:    #8b7cf8;
+    --purple-bg: rgba(139,124,248,0.12);
+    --amber:     #f0a940;
+    --amber-bg:  rgba(240,169,64,0.12);
+    --teal:      #34c9a0;
+    --teal-bg:   rgba(52,201,160,0.12);
+    --coral:     #f07060;
+    --coral-bg:  rgba(240,112,96,0.12);
+    --gray:      #9ca0b0;
+    --gray-bg:   rgba(156,160,176,0.12);
+    --mono:      'JetBrains Mono', 'Fira Mono', monospace;
+    --sans:      'Inter', system-ui, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 24px 60px;
+  }
+
+  header { text-align: center; margin-bottom: 40px; }
+  header h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.3px; color: var(--text); }
+  header p { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; margin-bottom: 36px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+
+  .diagram-wrap { width: 100%; max-width: 780px; }
+
+  svg text { font-family: var(--sans); }
+
+  .node-purple rect { fill: var(--purple-bg); stroke: var(--purple); stroke-width: 1; }
+  .node-purple .label { fill: var(--purple); font-size: 13px; font-weight: 600; }
+  .node-purple .sublabel { fill: #a89ef8; font-size: 11px; }
+
+  .node-amber rect { fill: var(--amber-bg); stroke: var(--amber); stroke-width: 1; }
+  .node-amber .label { fill: var(--amber); font-size: 13px; font-weight: 600; }
+  .node-amber .sublabel { fill: #c9974a; font-size: 11px; }
+
+  .node-teal rect { fill: var(--teal-bg); stroke: var(--teal); stroke-width: 1; }
+  .node-teal .label { fill: var(--teal); font-size: 13px; font-weight: 600; }
+  .node-teal .sublabel { fill: #5ec9ad; font-size: 11px; }
+
+  .node-coral rect { fill: var(--coral-bg); stroke: var(--coral); stroke-width: 1; }
+  .node-coral .label { fill: var(--coral); font-size: 13px; font-weight: 600; }
+  .node-coral .sublabel { fill: #d4806f; font-size: 11px; }
+
+  .node-gray rect { fill: var(--gray-bg); stroke: var(--gray); stroke-width: 1; }
+  .node-gray .label { fill: var(--gray); font-size: 13px; font-weight: 600; }
+
+  .pydantic-badge rect { fill: rgba(255,255,255,0.04); stroke: rgba(255,255,255,0.12); stroke-width: 0.75; stroke-dasharray: 3 2; }
+  .pydantic-badge .key { fill: #7c8099; font-size: 10px; font-weight: 500; }
+  .pydantic-badge .val { font-size: 10px; font-weight: 600; }
+  .pydantic-badge .val-purple { fill: #a89ef8; }
+  .pydantic-badge .val-amber  { fill: #d4ac6a; }
+  .pydantic-badge .val-teal   { fill: #5ec9ad; }
+
+  .arr { stroke: rgba(255,255,255,0.22); stroke-width: 1; fill: none; }
+  .arr-label { fill: #5a5f78; font-size: 10px; }
+  .leader { stroke: rgba(255,255,255,0.12); stroke-width: 0.75; stroke-dasharray: 3 2; fill: none; }
+  .section-label { fill: #5a5f78; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; }
+
+  .persist-bar rect { fill: rgba(156,160,176,0.07); stroke: rgba(156,160,176,0.2); stroke-width: 0.75; }
+  .persist-bar text { fill: var(--muted); font-size: 10.5px; }
+
+  .tooltip {
+    position: fixed;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--text);
+    max-width: 260px;
+    line-height: 1.5;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 99;
+  }
+  .tooltip.show { opacity: 1; }
+  .tooltip .tt-title { font-weight: 600; font-size: 12.5px; margin-bottom: 4px; }
+  .tooltip .tt-code { font-family: var(--mono); font-size: 10.5px; color: var(--muted); background: rgba(255,255,255,0.04); padding: 2px 5px; border-radius: 4px; display: inline-block; margin-top: 3px; }
+
+  .clickable { cursor: pointer; }
+  .clickable rect { transition: filter 0.15s; }
+  .clickable:hover rect { filter: brightness(1.25); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Cascade Bank RAG — rag-local-demo</h1>
+  <p>Architecture diagram · hover nodes for detail · local embed/rerank + OpenRouter (gpt-4o-mini)</p>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#8b7cf8"></div>Local ML model / LLM call</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f0a940"></div>Config gate / decision</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#34c9a0"></div>Data handling / storage / output</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f07060"></div>Fallback / no-key path</div>
+  <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.08); border:1px dashed rgba(255,255,255,0.2)"></div>Config / stats badge</div>
+</div>
+
+<div class="diagram-wrap">
+<svg width="100%" viewBox="0 0 780 1150" role="img">
+  <title>Cascade Bank RAG Architecture</title>
+  <desc>Flowchart of the rag-local-demo pipeline: synthetic corpus generation, extraction, chunking, local embedding, Chroma storage, semantic search, local cross-encoder reranking, an OpenRouter-key gate branching into cited LLM answer generation or a retrieved-context-only fallback, and a Chainlit UI.</desc>
+
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arr-muted" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="rgba(240,112,96,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <!-- START -->
+  <g class="node-gray">
+    <rect x="300" y="16" width="180" height="34" rx="17"/>
+    <text class="label" x="390" y="37" text-anchor="middle">START</text>
+  </g>
+  <line x1="390" y1="50" x2="390" y2="80" class="arr" marker-end="url(#arr)"/>
+
+  <!-- NODE 1: generate_corpus -->
+  <g class="node-teal clickable" id="n-gen" data-tt="gen">
+    <rect x="200" y="80" width="380" height="58" rx="8"/>
+    <text class="label" x="390" y="103" text-anchor="middle">generate_corpus</text>
+    <text class="sublabel" x="390" y="120" text-anchor="middle">src/data_gen · Faker synthetic PDFs, SOPs, CSVs (seed=42)</text>
+  </g>
+  <line x1="390" y1="138" x2="390" y2="168" class="arr" marker-end="url(#arr)"/>
+
+  <!-- NODE 2: extract -->
+  <g class="node-teal clickable" id="n-extract" data-tt="extract">
+    <rect x="200" y="168" width="380" height="58" rx="8"/>
+    <text class="label" x="390" y="191" text-anchor="middle">extract</text>
+    <text class="sublabel" x="390" y="208" text-anchor="middle">src/ingest/extract.py · pypdf + pandas raw text pull</text>
+  </g>
+  <line x1="390" y1="226" x2="390" y2="256" class="arr" marker-end="url(#arr)"/>
+
+  <!-- NODE 3: chunk -->
+  <g class="node-teal clickable" id="n-chunk" data-tt="chunk">
+    <rect x="200" y="256" width="380" height="58" rx="8"/>
+    <text class="label" x="390" y="279" text-anchor="middle">chunk</text>
+    <text class="sublabel" x="390" y="296" text-anchor="middle">src/ingest/chunk.py · token-bounded splits w/ overlap</text>
+  </g>
+  <g class="pydantic-badge clickable" id="n-chunkcfg" data-tt="chunkcfg">
+    <rect x="595" y="258" width="170" height="50" rx="6"/>
+    <text class="key" x="605" y="274">config.yaml · chunking</text>
+    <text class="val val-teal" x="605" y="290" style="font-family:monospace;font-size:11px">500 tok / 100 overlap</text>
+    <text class="key" x="605" y="303">tiktoken cl100k_base</text>
+  </g>
+  <line x1="580" y1="283" x2="595" y2="283" class="leader"/>
+  <line x1="390" y1="314" x2="390" y2="344" class="arr" marker-end="url(#arr)"/>
+
+  <!-- NODE 4: embed -->
+  <g class="node-purple clickable" id="n-embed" data-tt="embed">
+    <rect x="200" y="344" width="380" height="70" rx="8"/>
+    <text class="label" x="390" y="367" text-anchor="middle">embed</text>
+    <text class="sublabel" x="390" y="384" text-anchor="middle">src/embed/local_embedder.py · local sentence-transformers</text>
+    <text class="sublabel" x="390" y="399" text-anchor="middle">src/embed/cache.py · on-disk embedding cache</text>
+  </g>
+  <g class="pydantic-badge clickable" id="n-embedcfg" data-tt="embedcfg">
+    <rect x="595" y="346" width="170" height="56" rx="6"/>
+    <text class="key" x="605" y="362">Local embedding model</text>
+    <text class="val val-purple" x="605" y="378" style="font-family:monospace;font-size:10.5px">bge-small-en-v1.5</text>
+    <text class="key" x="605" y="392">384-dim · batch 64</text>
+  </g>
+  <line x1="580" y1="378" x2="595" y2="378" class="leader"/>
+  <line x1="390" y1="414" x2="390" y2="444" class="arr" marker-end="url(#arr)"/>
+
+  <!-- NODE 5: chroma store -->
+  <g class="node-teal clickable" id="n-store" data-tt="store">
+    <rect x="200" y="444" width="380" height="58" rx="8"/>
+    <text class="label" x="390" y="467" text-anchor="middle">ingest_to_chroma</text>
+    <text class="sublabel" x="390" y="484" text-anchor="middle">src/store · persistent Chroma collection "cascade_docs"</text>
+  </g>
+  <g class="pydantic-badge clickable" id="n-storestats" data-tt="storestats">
+    <rect x="595" y="446" width="170" height="54" rx="6"/>
+    <text class="key" x="605" y="462">Validated collection</text>
+    <text class="val val-teal" x="605" y="478" style="font-family:monospace;font-size:11px">348 chunks</text>
+    <text class="key" x="605" y="492">206 pdf · 40 sop · 102 csv</text>
+  </g>
+  <line x1="580" y1="473" x2="595" y2="473" class="leader"/>
+
+  <line x1="390" y1="502" x2="390" y2="532" class="arr" marker-end="url(#arr)"/>
+  <text class="section-label" x="390" y="524" text-anchor="middle" style="fill:#4a4f68">·  ingest-time above / query-time below  ·</text>
+
+  <!-- NODE 6: search -->
+  <g class="node-teal clickable" id="n-search" data-tt="search">
+    <rect x="200" y="532" width="380" height="58" rx="8"/>
+    <text class="label" x="390" y="555" text-anchor="middle">semantic_search</text>
+    <text class="sublabel" x="390" y="572" text-anchor="middle">src/search · query embedding + cosine top-k lookup</text>
+  </g>
+  <line x1="390" y1="590" x2="390" y2="620" class="arr" marker-end="url(#arr)"/>
+
+  <!-- NODE 7: rerank -->
+  <g class="node-purple clickable" id="n-rerank" data-tt="rerank">
+    <rect x="200" y="620" width="380" height="58" rx="8"/>
+    <text class="label" x="390" y="643" text-anchor="middle">cross_encoder_rerank</text>
+    <text class="sublabel" x="390" y="660" text-anchor="middle">src/rerank · local CrossEncoder re-scores shortlist</text>
+  </g>
+  <g class="pydantic-badge clickable" id="n-rerankcfg" data-tt="rerankcfg">
+    <rect x="595" y="622" width="170" height="50" rx="6"/>
+    <text class="key" x="605" y="638">Local rerank model</text>
+    <text class="val val-purple" x="605" y="654" style="font-family:monospace;font-size:10px">ms-marco-MiniLM-L-6</text>
+    <text class="key" x="605" y="667">top_k=10 → top_n=4</text>
+  </g>
+  <line x1="580" y1="647" x2="595" y2="647" class="leader"/>
+  <line x1="390" y1="678" x2="390" y2="708" class="arr" marker-end="url(#arr)"/>
+
+  <!-- NODE 8: key gate -->
+  <g class="node-amber clickable" id="n-gate" data-tt="gate">
+    <rect x="200" y="708" width="380" height="58" rx="8"/>
+    <text class="label" x="390" y="731" text-anchor="middle">require_openrouter_key check</text>
+    <text class="sublabel" x="390" y="748" text-anchor="middle">src/config.py · is OPENROUTER_API_KEY set?</text>
+  </g>
+
+  <!-- branch arrows -->
+  <path d="M270 766 L230 766 L230 796" class="arr" fill="none" stroke="rgba(255,255,255,0.22)" marker-end="url(#arr)"/>
+  <text class="arr-label" x="205" y="785" text-anchor="middle">key set</text>
+
+  <path d="M510 766 L550 766 L550 796" class="arr" fill="none" stroke="rgba(240,112,96,0.4)" stroke-dasharray="5 3" marker-end="url(#arr-muted)"/>
+  <text class="arr-label" x="573" y="785" text-anchor="middle" style="fill:#d4806f">no key</text>
+
+  <!-- NODE 9a: generate_answer -->
+  <g class="node-purple clickable" id="n-answer" data-tt="answer">
+    <rect x="100" y="796" width="260" height="58" rx="8"/>
+    <text class="label" x="230" y="819" text-anchor="middle">answer_synthesis</text>
+    <text class="sublabel" x="230" y="836" text-anchor="middle">OpenRouter · gpt-4o-mini, cited answer</text>
+  </g>
+
+  <!-- NODE 9b: fallback -->
+  <g class="node-coral clickable" id="n-fallback" data-tt="fallback">
+    <rect x="420" y="796" width="260" height="58" rx="8"/>
+    <text class="label" x="550" y="819" text-anchor="middle">fallback mode</text>
+    <text class="sublabel" x="550" y="836" text-anchor="middle">No key: retrieved-context-only reply</text>
+  </g>
+
+  <!-- merge into UI -->
+  <line x1="230" y1="854" x2="230" y2="884" class="arr" marker-end="url(#arr)"/>
+  <line x1="550" y1="854" x2="550" y2="884" class="arr" stroke="rgba(240,112,96,0.4)" stroke-dasharray="5 3" fill="none" marker-end="url(#arr-muted)"/>
+  <path d="M230 884 L390 914" class="arr" fill="none" stroke="rgba(255,255,255,0.22)" marker-end="url(#arr)"/>
+  <path d="M550 884 L390 914" class="arr" fill="none" stroke="rgba(255,255,255,0.22)" marker-end="url(#arr)"/>
+
+  <!-- NODE 10: UI -->
+  <g class="node-teal clickable" id="n-ui" data-tt="ui">
+    <rect x="200" y="914" width="380" height="58" rx="8"/>
+    <text class="label" x="390" y="937" text-anchor="middle">Chainlit chat UI</text>
+    <text class="sublabel" x="390" y="954" text-anchor="middle">src/ui/app.py · retrieve / rerank / answer panels</text>
+  </g>
+
+  <line x1="390" y1="972" x2="390" y2="1002" class="arr" marker-end="url(#arr)"/>
+
+  <!-- END -->
+  <g class="node-gray">
+    <rect x="300" y="1002" width="180" height="34" rx="17"/>
+    <text class="label" x="390" y="1023" text-anchor="middle">END</text>
+  </g>
+
+  <!-- persistence bar -->
+  <g class="persist-bar">
+    <rect x="30" y="1066" width="720" height="30" rx="6"/>
+    <text x="390" y="1085" text-anchor="middle">
+      💾  Chroma persistent vector store — data/chroma_db · collection "cascade_docs" · reused across runs
+    </text>
+  </g>
+
+  <!-- left sidebar: config.yaml -->
+  <g class="pydantic-badge">
+    <rect x="14" y="80" width="170" height="150" rx="6"/>
+    <text class="key" x="24" y="96">config.yaml (shared config)</text>
+    <text class="val val-purple" x="24" y="112" style="font-size:10px;font-family:monospace">paths.* · corpus.*</text>
+    <text class="key" x="24" y="126">num_pdfs 18 · sops 8</text>
+    <text class="key" x="24" y="140">csvs 5 · seed 42</text>
+    <text class="key" x="24" y="154">chunking.* · embedding.*</text>
+    <text class="key" x="24" y="168">vector_store.collection</text>
+    <text class="key" x="24" y="182">search.top_k · rerank.*</text>
+    <text class="key" x="24" y="196">generation.* (OpenRouter)</text>
+    <text class="key" x="24" y="212" style="font-style:italic">Loaded once via</text>
+    <text class="key" x="24" y="224" style="font-family:monospace;font-size:9.5px">src/config.get_config()</text>
+  </g>
+  <line x1="184" y1="152" x2="200" y2="152" class="leader"/>
+
+</svg>
+</div>
+
+<!-- Tooltip -->
+<div class="tooltip" id="tooltip">
+  <div class="tt-title" id="tt-title"></div>
+  <div id="tt-body"></div>
+</div>
+
+<script>
+const tips = {
+  gen: {
+    title: 'generate_corpus',
+    body: '<span class="tt-code">python -m src.data_gen.generate_all</span> uses Faker to build a synthetic "Cascade Bank" corpus — 18 policy/product PDFs, 8 SOP-structured PDFs, 5 CSVs — reproducibly via <span class="tt-code">corpus.seed: 42</span>.'
+  },
+  extract: {
+    title: 'extract',
+    body: 'src/ingest/extract.py pulls raw text out of the generated PDFs (pypdf) and CSVs (pandas), the first step of the offline "ingest-time" half of the pipeline.'
+  },
+  chunk: {
+    title: 'chunk',
+    body: 'src/ingest/chunk.py token-bounds splits using tiktoken\'s <span class="tt-code">cl100k_base</span> encoding, 500 tokens per chunk with 100-token overlap so consecutive chunks share head/tail text (verified in test_chunk_overlap.py).'
+  },
+  chunkcfg: {
+    title: 'chunking config',
+    body: 'From config.yaml: <span class="tt-code">chunk_size: 500</span>, <span class="tt-code">chunk_overlap: 100</span>, <span class="tt-code">encoding: cl100k_base</span>.'
+  },
+  embed: {
+    title: 'embed',
+    body: 'src/embed/local_embedder.py runs a local sentence-transformers bi-encoder entirely on CPU — no API call. src/embed/cache.py keys an on-disk cache by a deterministic <span class="tt-code">chunk_hash</span> so re-embedding is skipped on reruns.'
+  },
+  embedcfg: {
+    title: 'embedding config',
+    body: 'Model <span class="tt-code">BAAI/bge-small-en-v1.5</span>, 384-dim vectors, batch_size 64. Chosen because OpenRouter has no embeddings endpoint — only a local model can fill that gap for free and offline.'
+  },
+  store: {
+    title: 'ingest_to_chroma',
+    body: 'src/store/ingest_to_chroma.py (<span class="tt-code">--reset</span> for a clean rebuild) upserts chunked, embedded docs into a persistent Chroma collection at data/chroma_db. src/store/inspect.py exposes stats, samples, overlap views, and a 2D UMAP/t-SNE projection.'
+  },
+  storestats: {
+    title: 'Validated run stats',
+    body: 'README reports a full pipeline run producing 348 chunks in the "cascade_docs" collection: 206 from PDFs, 40 from SOPs, 102 from CSVs.'
+  },
+  search: {
+    title: 'semantic_search',
+    body: 'src/search/semantic_search.py embeds the query with the same local bi-encoder, then does a cosine top-k lookup against Chroma. <span class="tt-code">search.top_k: 10</span> in config.yaml.'
+  },
+  rerank: {
+    title: 'cross_encoder_rerank',
+    body: 'src/rerank/cross_encoder_rerank.py scores each (query, passage) pair jointly with a local sentence-transformers CrossEncoder — more accurate than cosine similarity alone, run only on the top-10 shortlist for speed.'
+  },
+  rerankcfg: {
+    title: 'rerank config',
+    body: 'Model <span class="tt-code">cross-encoder/ms-marco-MiniLM-L-6-v2</span>. Takes the top_k=10 semantic-search results down to <span class="tt-code">rerank.top_n: 4</span> survivors.'
+  },
+  gate: {
+    title: 'require_openrouter_key gate',
+    body: 'src/config.py checks whether <span class="tt-code">OPENROUTER_API_KEY</span> is set (from .env, gitignored — only .env.example is tracked). This is the one point an external API is even optional.'
+  },
+  answer: {
+    title: 'answer_synthesis',
+    body: 'src/generate/answer_synthesis.py + openrouter_client.py call OpenRouter\'s OpenAI-compatible chat endpoint with <span class="tt-code">openai/gpt-4o-mini</span> (temperature 0.2, max_tokens 800) to turn the reranked chunks into a cited answer.'
+  },
+  fallback: {
+    title: 'fallback mode',
+    body: 'If no OpenRouter key is configured, generation skips the LLM call entirely and returns a "retrieved-context-only" response built directly from the reranked chunks — search and rerank still run fully offline.'
+  },
+  ui: {
+    title: 'Chainlit chat UI',
+    body: 'Launched via <span class="tt-code">chainlit run src/ui/app.py</span>. Wraps the whole query-time flow (search → rerank → generate/fallback) in a chat interface with retrieve/rerank/answer panels, per chainlit.md.'
+  }
+};
+
+const tt = document.getElementById('tooltip');
+const ttTitle = document.getElementById('tt-title');
+const ttBody = document.getElementById('tt-body');
+
+document.querySelectorAll('[data-tt]').forEach(el => {
+  el.addEventListener('mouseenter', e => {
+    const key = el.dataset.tt;
+    if (!tips[key]) return;
+    ttTitle.textContent = tips[key].title;
+    ttBody.innerHTML = tips[key].body;
+    tt.classList.add('show');
+  });
+  el.addEventListener('mousemove', e => {
+    tt.style.left = (e.clientX + 14) + 'px';
+    tt.style.top  = (e.clientY + 14) + 'px';
+  });
+  el.addEventListener('mouseleave', () => tt.classList.remove('show'));
+});
+</script>
+</body>
+</html>

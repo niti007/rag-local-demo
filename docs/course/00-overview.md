@@ -41,8 +41,8 @@ readable Python module you can run, break, and inspect.
  └──────────────┘   └───────────────┘   └───────────────┘   └───────┬────────┘
                                                                      │
  ┌──────────────┐   ┌───────────────┐   ┌───────────────┐   ┌───────▼────────┐
- │ 8. UI        │◀──│ 7. GENERATE   │◀──│ 6. RERANK     │◀──│ 5. CHROMA      │
- │ Chainlit chat│   │ OpenRouter    │   │ local cross-  │   │ persistent     │
+ │ 8. UI        │◀──│ 7. GENERATE   │◀──│ 6. RERANK     │◀──│ 5. QDRANT      │
+ │ Chainlit chat│   │ OpenRouter    │   │ local cross-  │   │ server (Docker)│
  │ (retrieve/   │   │ (gpt-4o-mini),│   │ encoder       │   │ vector store   │
  │ rerank/answer│   │ cited answer  │   │ re-scores     │   │ (unified       │
  │ panels)      │   │ or fallback   │   │ shortlist     │   │ collection)    │
@@ -54,7 +54,7 @@ readable Python module you can run, break, and inspect.
 ```
 
 Read left-to-right, top row then bottom row: **generate → extract → chunk →
-embed → Chroma → search → rerank → generate (answer) → UI**. The first four
+embed → Qdrant → search → rerank → generate (answer) → UI**. The first four
 stages ("ingest-time") run once (or whenever the corpus changes); the last
 four ("query-time") run on every user question.
 
@@ -96,9 +96,9 @@ RAG/
 │   ├── embed/                       # Stage 4: local embeddings + cache
 │   │   ├── local_embedder.py        (embed_texts, embed_query)
 │   │   └── cache.py                 (EmbeddingCache, chunk_hash)
-│   ├── store/                       # Stage 5: ChromaDB
-│   │   ├── chroma_client.py         (get_or_create_collection, upsert_chunks)
-│   │   ├── ingest_to_chroma.py       (ingest_all — chunk+embed+upsert)
+│   ├── store/                       # Stage 5: Qdrant
+│   │   ├── qdrant_store.py          (get_or_create_collection, upsert_chunks)
+│   │   ├── ingest_to_qdrant.py       (ingest_all — chunk+embed+upsert)
 │   │   └── inspect.py                (stats, sample, overlap, 2D projection)
 │   ├── search/                      # Stage 6: semantic search
 │   │   └── semantic_search.py       (semantic_search)
@@ -139,7 +139,7 @@ chainlit run src/ui/app.py
 
 `scripts/run_full_pipeline.py` runs, in order: `generate_all()` (writes
 synthetic PDFs/SOPs/CSVs to `data/raw/`), `ingest_all(reset=True)`
-(chunk → embed → upsert into Chroma, wiping any existing collection first),
+(chunk → embed → upsert into Qdrant, wiping any existing collection first),
 `print_stats()`, and `embedding_projection()` (writes a 2D scatter plot to
 `docs/course/embedding_scatter.html` / `.png`). Pass `--skip-gen` to re-run
 ingestion against whatever is already in `data/raw/` without regenerating
@@ -156,7 +156,7 @@ still works — the UI and CLI tools fall back to a no-LLM
 | 01 | [Synthetic Data](01-synthetic-data.md) | Generate |
 | 02 | [Chunking & Overlap](02-chunking-and-overlap.md) | Chunk |
 | 03 | [Embeddings & Cache](03-embeddings-and-cache.md) | Embed |
-| 04 | [Vector Store: ChromaDB](04-vector-store-chromadb.md) | Store |
+| 04 | [Vector Store: Qdrant](04-vector-store-qdrant.md) | Store |
 | 05 | [Inspection & Visualization](05-inspection-and-viz.md) | Store (inspect) |
 | 06 | [Semantic Search](06-semantic-search.md) | Search |
 | 07 | [Reranking](07-reranking.md) | Rerank |

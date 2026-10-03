@@ -128,7 +128,7 @@
 <div class="diagram-wrap">
 <svg width="100%" viewBox="0 0 780 1150" role="img">
   <title>Cascade Bank RAG Architecture</title>
-  <desc>Flowchart of the rag-local-demo pipeline: synthetic corpus generation, extraction, chunking, local embedding, Chroma storage, semantic search, local cross-encoder reranking, an OpenRouter-key gate branching into cited LLM answer generation or a retrieved-context-only fallback, and a Chainlit UI.</desc>
+  <desc>Flowchart of the rag-local-demo pipeline: synthetic corpus generation, extraction, chunking, local embedding, Qdrant storage, semantic search, local cross-encoder reranking, an OpenRouter-key gate branching into cited LLM answer generation or a retrieved-context-only fallback, and a Chainlit UI.</desc>
 
   <defs>
     <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -193,11 +193,11 @@
   <line x1="580" y1="378" x2="595" y2="378" class="leader"/>
   <line x1="390" y1="414" x2="390" y2="444" class="arr" marker-end="url(#arr)"/>
 
-  <!-- NODE 5: chroma store -->
+  <!-- NODE 5: qdrant store -->
   <g class="node-teal clickable" id="n-store" data-tt="store">
     <rect x="200" y="444" width="380" height="58" rx="8"/>
-    <text class="label" x="390" y="467" text-anchor="middle">ingest_to_chroma</text>
-    <text class="sublabel" x="390" y="484" text-anchor="middle">src/store · persistent Chroma collection "cascade_docs"</text>
+    <text class="label" x="390" y="467" text-anchor="middle">ingest_to_qdrant</text>
+    <text class="sublabel" x="390" y="484" text-anchor="middle">src/store · Qdrant collection "cascade_docs"</text>
   </g>
   <g class="pydantic-badge clickable" id="n-storestats" data-tt="storestats">
     <rect x="595" y="446" width="170" height="54" rx="6"/>
@@ -286,7 +286,7 @@
   <g class="persist-bar">
     <rect x="30" y="1066" width="720" height="30" rx="6"/>
     <text x="390" y="1085" text-anchor="middle">
-      💾  Chroma persistent vector store — data/chroma_db · collection "cascade_docs" · reused across runs
+      💾  Qdrant vector store (Docker) — localhost:6333 · collection "cascade_docs" · reused across runs
     </text>
   </g>
 
@@ -342,8 +342,8 @@ const tips = {
     body: 'Model <span class="tt-code">BAAI/bge-small-en-v1.5</span>, 384-dim vectors, batch_size 64. Chosen because OpenRouter has no embeddings endpoint — only a local model can fill that gap for free and offline.'
   },
   store: {
-    title: 'ingest_to_chroma',
-    body: 'src/store/ingest_to_chroma.py (<span class="tt-code">--reset</span> for a clean rebuild) upserts chunked, embedded docs into a persistent Chroma collection at data/chroma_db. src/store/inspect.py exposes stats, samples, overlap views, and a 2D UMAP/t-SNE projection.'
+    title: 'ingest_to_qdrant',
+    body: 'src/store/ingest_to_qdrant.py (<span class="tt-code">--reset</span> for a clean rebuild) upserts chunked, embedded docs into a Qdrant collection on the Dockerized server (localhost:6333). src/store/inspect.py exposes stats, samples, overlap views, and a 2D UMAP/t-SNE projection.'
   },
   storestats: {
     title: 'Validated run stats',
@@ -351,7 +351,7 @@ const tips = {
   },
   search: {
     title: 'semantic_search',
-    body: 'src/search/semantic_search.py embeds the query with the same local bi-encoder, then does a cosine top-k lookup against Chroma. <span class="tt-code">search.top_k: 10</span> in config.yaml.'
+    body: 'src/search/semantic_search.py embeds the query with the same local bi-encoder, then does a cosine top-k lookup against Qdrant. <span class="tt-code">search.top_k: 10</span> in config.yaml.'
   },
   rerank: {
     title: 'cross_encoder_rerank',

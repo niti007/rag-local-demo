@@ -40,7 +40,7 @@ transfers may sit near SOP chunks about wire transfer authorization).
 All of this lives in `src/store/inspect.py`:
 
 - `print_stats() -> dict` — pretty-prints `collection_stats()` (from
-  `src/store/chroma_client.py`, lesson 04): total chunks and a per-`doc_type`
+  `src/store/qdrant_store.py`, lesson 04): total chunks and a per-`doc_type`
   breakdown.
 - `sample_chunks(n=10, doc_type=None, offset=0) -> list[dict]` — fetches
   chunks via `collection.get(include=["documents", "metadatas"], where=...)`,
@@ -107,7 +107,7 @@ directly.
 
 - `--stats` output totals should match what `ingest_all` printed right
   after ingestion (lesson 04) — if they don't, something is stale (wrong
-  `chroma_db` path, or you're looking at a leftover collection from before
+  Qdrant URL / collection, or you're looking at a leftover collection from before
   a `--reset`).
 - `--sample` rows should show readable, on-topic text previews (banking
   prose for `pdf`/`sop`, `"Row N: col: value | ..."` lines for `csv`) — if

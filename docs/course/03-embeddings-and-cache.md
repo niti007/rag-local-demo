@@ -22,9 +22,9 @@ small local bi-encoder is faster, free, and fully offline.
 meaning each vector is scaled to unit length. For unit vectors, cosine
 similarity — the standard way to compare embedding direction while ignoring
 magnitude — reduces to a simple dot product, and cosine *distance*
-(what Chroma returns) is `1 - cosine_similarity`. Normalizing at embed time
-is what makes the vector store's `hnsw:space: "cosine"` configuration
-(see [`04-vector-store-chromadb.md`](04-vector-store-chromadb.md)) behave
+is `1 - cosine_similarity` (Qdrant's cosine `score` is the similarity itself). Normalizing at embed time
+is what makes the vector store's `Distance.COSINE` configuration
+(see [`04-vector-store-qdrant.md`](04-vector-store-qdrant.md)) behave
 correctly and efficiently.
 
 **Asymmetric query/passage embedding.** BGE models are trained with a
@@ -51,7 +51,7 @@ from two different models.
 - `src/embed/cache.py`
   - `chunk_hash(text, model) -> str` — `sha256(f"{model}\n{text}")` hex
     digest. Used both as the embedding-cache key **and** (in
-    `src/store/chroma_client.py`) as the Chroma document id — the same hash
+    `src/store/qdrant_store.py`) as the basis of the Qdrant point id (a UUID built from the hash, with the full hash kept in the payload as `chunk_id`) — the same hash
     function ties the cache and the vector store's idempotency together.
   - `EmbeddingCache(cache_dir)` — on-disk cache storing each vector as an
     individual `<hash>.npy` file.
@@ -68,7 +68,7 @@ from two different models.
   - `_verify_dim(vector_len)` — raises a `RuntimeError` if the model's
     actual output dimension doesn't match `cfg.embedding.dim` (384) in
     `config.yaml` — a guard against silently shipping mismatched vectors
-    into Chroma if you swap `cfg.embedding.model` without updating `dim`.
+    into Qdrant if you swap `cfg.embedding.model` without updating `dim`.
   - `embed_texts(texts, use_cache=True, is_query=False) -> list[list[float]]`
     — the main entry point. For each text: prepend `cfg.embedding.query_prefix`
     if `is_query=True`; compute `chunk_hash`; check the cache; batch every

@@ -11,7 +11,7 @@ financial record.
 Every question you ask is shown running through three distinct stages, so
 you can see exactly what each stage contributes:
 
-1. **Retrieve** -- a local bi-encoder embedding model searches the Chroma
+1. **Retrieve** -- a local bi-encoder embedding model searches the Qdrant
    vector store and returns the `top_k` most similar chunks by cosine
    similarity.
 2. **Rerank** -- a cross-encoder re-scores that shortlist for finer-grained

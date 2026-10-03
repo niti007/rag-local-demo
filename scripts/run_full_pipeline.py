@@ -2,7 +2,7 @@
 One-shot end-to-end pipeline for the local RAG teaching demo:
 
     generate_all()          -- write synthetic PDFs/SOPs/CSVs to data/raw
-    ingest_all(reset=True)  -- chunk -> embed -> upsert into Chroma
+    ingest_all(reset=True)  -- chunk -> embed -> upsert into Qdrant
     print_stats()           -- pretty-print collection stats
     embedding_projection()  -- write a 2D embedding scatter (HTML + PNG)
 
@@ -23,7 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.config import PROJECT_ROOT  # noqa: E402
 from src.data_gen.generate_all import generate_all  # noqa: E402
-from src.store.ingest_to_chroma import ingest_all  # noqa: E402
+from src.store.ingest_to_qdrant import ingest_all  # noqa: E402
 from src.store.inspect import embedding_projection, print_stats  # noqa: E402
 
 
@@ -55,7 +55,7 @@ def main() -> None:
         _banner("PHASE 1/4: Generating synthetic source documents")
         gen_summary = generate_all()
 
-    _banner("PHASE 2/4: Ingesting into Chroma (chunk -> embed -> upsert)")
+    _banner("PHASE 2/4: Ingesting into Qdrant (chunk -> embed -> upsert)")
     stats = ingest_all(reset=True)
 
     _banner("PHASE 3/4: Collection stats")

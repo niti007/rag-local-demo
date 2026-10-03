@@ -25,7 +25,7 @@ python -m src.store.inspect --overlap 01_policy_account_overdraft_policy.pdf
 
 # 3. Re-ingest with the new setting (reset=True is required -- chunk_overlap
 #    changes every chunk's boundaries, so old chunk ids no longer apply)
-python -m src.store.ingest_to_chroma --reset
+python -m src.store.ingest_to_qdrant --reset
 
 # 4. Inspect the same file again
 python -m src.store.inspect --overlap 01_policy_account_overdraft_policy.pdf
@@ -60,7 +60,7 @@ model with a **different output dimension** than 384, without updating
 #    different-dim model, e.g. sentence-transformers/all-mpnet-base-v2, which outputs 768-dim)
 
 # 2. Try to re-ingest without touching embedding.dim (still 384)
-python -m src.store.ingest_to_chroma --reset
+python -m src.store.ingest_to_qdrant --reset
 ```
 
 **Expected result:** `_verify_dim` in `src/embed/local_embedder.py` raises a
@@ -96,7 +96,7 @@ python -m src.search.semantic_search --query "how are exceptions escalated" --do
 **Expected result:** The unfiltered run mixes doc types; each filtered run
 returns only chunks from that one source type, and (usually) different
 scores than the unfiltered run's corresponding rank, since the filter
-changes the *candidate pool* Chroma searches within.
+changes the *candidate pool* Qdrant searches within.
 
 **Reflection question:** For this query, which `doc_type` filter, if any,
 would you pick in a real usage scenario, and why? Would your answer change
@@ -219,34 +219,35 @@ or less likely?
 
 ---
 
-## Exercise 8 — Trace one chunk's id from cache to Chroma
+## Exercise 8 — Trace one chunk's id from cache to Qdrant
 
 **Concept:** [`03-embeddings-and-cache.md`](03-embeddings-and-cache.md),
-[`04-vector-store-chromadb.md`](04-vector-store-chromadb.md)
+[`04-vector-store-qdrant.md`](04-vector-store-qdrant.md)
 
 **Task:** Pick one stored chunk, compute its content hash by hand, and
 confirm the exact same hash shows up both as an embedding-cache filename
-and as its Chroma document id.
+and as its Qdrant payload `chunk_id` (the point id is a UUID derived from it).
 
 **Commands:**
 
 ```powershell
 python -c "
-from src.store.chroma_client import get_or_create_collection
+import uuid
+from src.store.qdrant_store import scroll_all, point_id
 from src.embed.cache import chunk_hash
 from src.config import get_config
 
-collection = get_or_create_collection()
-result = collection.get(include=['documents'], limit=1)
-chunk_id = result['ids'][0]
-text = result['documents'][0]
+chunk = scroll_all()[0]   # {id, text, metadata}; id is the payload chunk_id
+chunk_id = chunk['id']
+text = chunk['text']
 
 cfg = get_config()
 computed_hash = chunk_hash(text, cfg.embedding.model)
 
-print('Chroma id:       ', chunk_id)
+print('Qdrant chunk_id: ', chunk_id)
 print('Computed hash:   ', computed_hash)
 print('Match:           ', chunk_id == computed_hash)
+print('Point id (UUID): ', point_id(computed_hash))
 
 import os
 cache_file = cfg.paths.embedding_cache / f'{computed_hash}.npy'
@@ -258,10 +259,10 @@ print('Cache file exists:', cache_file.exists())
 corresponding `.npy` file exists in the embedding cache directory — proof
 that the same `chunk_hash(text, model)` function (from
 `src/embed/cache.py`) is used as both the cache key at embed time and the
-document id at Chroma-upsert time, which is exactly what makes re-ingestion
+payload `chunk_id` (and UUID point id) at Qdrant-upsert time, which is exactly what makes re-ingestion
 idempotent (lesson 04).
 
 **Reflection question:** If you edited that one chunk's source PDF slightly
-(changing its text) and re-ingested, would the old Chroma entry for this
+(changing its text) and re-ingested, would the old Qdrant point for this
 chunk be deleted, or would it become an orphan? (Revisit the teaching note
 at the end of lesson 04 if you're not sure.)

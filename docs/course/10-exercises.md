@@ -147,7 +147,7 @@ and ask the same question.
 **Commands:**
 
 ```powershell
-chainlit run src/ui/app.py
+PYTHONPATH=. chainlit run src/ui/app.py
 # then use the gear icon in the browser
 ```
 

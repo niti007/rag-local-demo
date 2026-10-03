@@ -99,7 +99,7 @@ see collection totals or the 2D embedding scatter.
 Launch the UI from the project root:
 
 ```powershell
-chainlit run src/ui/app.py
+PYTHONPATH=. chainlit run src/ui/app.py
 ```
 
 In the browser tab that opens:

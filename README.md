@@ -83,7 +83,7 @@ docker compose up -d
 python scripts/run_full_pipeline.py
 
 # 6. Launch the chat UI
-chainlit run src/ui/app.py
+PYTHONPATH=. chainlit run src/ui/app.py
 # then open the localhost URL Chainlit prints (default http://localhost:8000)
 ```
 
@@ -181,7 +181,7 @@ This pipeline has been run end-to-end and validated:
 - Full pipeline produced **348 chunks** in the Qdrant collection `cascade_docs`: **206 pdf / 40 sop / 102 csv**.
 - Semantic search + cross-encoder rerank confirmed working against the populated store.
 - Live answer generation via OpenRouter (`openai/gpt-4o-mini`) confirmed working with cited output.
-- Chainlit UI boots clean (`chainlit run src/ui/app.py`).
+- Chainlit UI boots clean (`PYTHONPATH=. chainlit run src/ui/app.py`).
 
 ## Security
 

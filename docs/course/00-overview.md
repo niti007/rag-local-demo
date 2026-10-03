@@ -134,7 +134,7 @@ notepad .env      # set OPENROUTER_API_KEY=sk-or-...
 python scripts/run_full_pipeline.py
 
 # 5. Launch the chat UI
-chainlit run src/ui/app.py
+PYTHONPATH=. chainlit run src/ui/app.py
 ```
 
 `scripts/run_full_pipeline.py` runs, in order: `generate_all()` (writes

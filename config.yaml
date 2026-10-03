@@ -3,7 +3,6 @@ paths:
   pdfs: data/raw/pdfs
   sops: data/raw/sops
   csvs: data/raw/csvs
-  chroma_db: data/chroma_db
   embedding_cache: .cache/embeddings
 
 corpus:
@@ -26,6 +25,7 @@ embedding:
 
 vector_store:
   collection: cascade_docs
+  url: http://localhost:6333   # Qdrant server (docker compose up -d); QDRANT_URL env overrides
 
 search:
   top_k: 10

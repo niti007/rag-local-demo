@@ -48,7 +48,7 @@ see collection totals or the 2D embedding scatter.
 - Import-safety design note (from the module docstring): only `src.config`
   is imported at module load time; everything else (search, rerank,
   generate, `store.inspect`) is imported **lazily inside handlers**, so the
-  app still starts cleanly even if the Chroma collection is empty, the
+  app still starts cleanly even if the Qdrant collection is empty, the
   sentence-transformers models haven't been downloaded yet, or
   `OPENROUTER_API_KEY` is unset. Heavy/blocking calls
   (`search_and_rerank`, `synthesize_answer`, `collection_stats`,
@@ -99,7 +99,7 @@ see collection totals or the 2D embedding scatter.
 Launch the UI from the project root:
 
 ```powershell
-chainlit run src/ui/app.py
+PYTHONPATH=. chainlit run src/ui/app.py
 ```
 
 In the browser tab that opens:

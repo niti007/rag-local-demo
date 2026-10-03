@@ -1,5 +1,5 @@
 """
-Inspection / visualization utilities for the Chroma vector store.
+Inspection / visualization utilities for the Qdrant vector store.
 
 Teaching-oriented tools to answer "what actually got stored?":
     - print_stats()          -- collection totals, per doc_type
@@ -25,7 +25,7 @@ from pathlib import Path
 import numpy as np
 
 from src.config import PROJECT_ROOT, get_config
-from src.store.chroma_client import collection_stats, get_or_create_collection
+from src.store.qdrant_store import collection_stats, scroll_all
 
 DEFAULT_SCATTER_HTML = PROJECT_ROOT / "docs" / "course" / "embedding_scatter.html"
 DEFAULT_SCATTER_PNG = PROJECT_ROOT / "docs" / "course" / "embedding_scatter.png"
@@ -69,15 +69,9 @@ def sample_chunks(n: int = 10, doc_type: str | None = None, offset: int = 0) -> 
         doc_type: optional filter, e.g. "pdf" | "sop" | "csv".
         offset: number of sorted rows to skip before taking the page.
     """
-    collection = get_or_create_collection()
-    where = {"doc_type": doc_type} if doc_type else None
+    points = scroll_all(doc_type=doc_type or None)
 
-    result = collection.get(include=["documents", "metadatas"], where=where)
-    ids = result.get("ids") or []
-    documents = result.get("documents") or []
-    metadatas = result.get("metadatas") or []
-
-    rows = list(zip(ids, documents, metadatas))
+    rows = [(p["id"], p["text"], p["metadata"]) for p in points]
     rows.sort(key=lambda r: (r[2].get("source_file", ""), r[2].get("chunk_index", 0)))
 
     page = rows[offset : offset + n]
@@ -148,13 +142,9 @@ def show_overlap(source_file: str) -> None:
          is real text (not just coincidentally overlapping offsets) and is
          robust even if offsets were ever approximate.
     """
-    collection = get_or_create_collection()
-    result = collection.get(
-        include=["documents", "metadatas"],
-        where={"source_file": source_file},
-    )
-    documents = result.get("documents") or []
-    metadatas = result.get("metadatas") or []
+    points = scroll_all(source_file=source_file)
+    documents = [p["text"] for p in points]
+    metadatas = [p["metadata"] for p in points]
 
     if not documents:
         print(f"No chunks found for source_file={source_file!r}")
@@ -245,14 +235,13 @@ def embedding_projection(out_path: Path | None = None, method: str = "umap") -> 
     html_path.parent.mkdir(parents=True, exist_ok=True)
     png_path = html_path.with_suffix(".png")
 
-    collection = get_or_create_collection()
-    result = collection.get(include=["embeddings", "metadatas", "documents"])
+    points = scroll_all(with_vectors=True)
 
-    embeddings = result.get("embeddings")
-    metadatas = result.get("metadatas") or []
-    documents = result.get("documents") or []
+    embeddings = [p["vector"] for p in points]
+    metadatas = [p["metadata"] for p in points]
+    documents = [p["text"] for p in points]
 
-    n = 0 if embeddings is None else len(embeddings)
+    n = len(embeddings)
 
     if n < 3:
         print(
@@ -373,7 +362,7 @@ def _write_placeholder(html_path: Path, png_path: Path, n: int) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Inspect and visualize the Chroma vector store."
+        description="Inspect and visualize the Qdrant vector store."
     )
     parser.add_argument("--stats", action="store_true", help="Print collection stats.")
     parser.add_argument(

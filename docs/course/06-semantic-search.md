@@ -20,14 +20,14 @@ function, `embed_texts` / `embed_query` in `src/embed/local_embedder.py`
 (lesson 03), used both at ingest time (`ingest_all`) and at query time
 (`semantic_search`).
 
-**Distance vs. similarity.** Chroma's cosine *distance* is `1 -
-cosine_similarity`: it decreases as vectors get more alike, ranging from 0
-(identical direction) to 2 (opposite direction) for normalized vectors, and
-is 1 for orthogonal (unrelated) vectors. This project converts that
-distance back into a more intuitive `score = 1 - distance` — a **cosine
-similarity** where higher is better — so results can be sorted and compared
-the "obvious" way (bigger number = closer match) rather than requiring
-everyone to remember "lower distance is better."
+**Distance vs. similarity.** Cosine *distance* is `1 - cosine_similarity`:
+it decreases as vectors get more alike (0 = identical direction, 1 =
+orthogonal, 2 = opposite). Qdrant's `COSINE` metric already returns the
+**similarity** as its `score` (higher is better), so this project uses
+`score = point.score` directly and derives `distance = 1 - score` to keep the
+result shape stable. Results can be sorted and compared the "obvious" way
+(bigger number = closer match) rather than requiring everyone to remember
+"lower distance is better."
 
 **Top-k.** Semantic search doesn't try to find *the* single best match — it
 returns the top `k` candidates (`cfg.search.top_k`, default 10), on the
@@ -38,9 +38,9 @@ near-misses.
 
 **Metadata filtering.** Sometimes you know in advance which document type
 is relevant (e.g. "what does the SOP say," or "look only at transaction
-data"). Chroma supports a `where` filter alongside the vector search, so you
-can restrict the nearest-neighbor search to only chunks whose `doc_type`
-metadata matches, without touching the embedding or distance computation at
+data"). Qdrant supports a payload `Filter` alongside the vector search (made fast
+by the keyword index on `doc_type`), so you can restrict the
+nearest-neighbor search to only chunks whose `doc_type` payload matches, without touching the embedding or distance computation at
 all.
 
 ## In this repo
@@ -54,18 +54,18 @@ all.
      bge-small model (with `is_query=True`, applying `cfg.embedding.query_prefix`
      if set).
   3. `collection = get_or_create_collection()` — the shared `cascade_docs`
-     collection (lesson 04).
-  4. Builds `where = {"doc_type": doc_type}` if `doc_type` is given, else
-     `None` (no filter, searches everything).
-  5. Calls `collection.query(query_embeddings=[query_vec], n_results=k,
-     include=["documents", "metadatas", "distances"], where=where)`.
-  6. Converts the raw Chroma response into a flat list of
-     `{"id", "text", "metadata", "distance", "score"}` dicts, with
-     `"score": 1.0 - distance`.
-  7. Sorts by `score` descending (Chroma already returns results in
-     distance order, but this makes the "higher score = better" invariant
-     explicit and stable regardless of Chroma's internal ordering
-     guarantees).
+     collection name (lesson 04).
+  4. Builds a payload `Filter` on `doc_type` if given, else `None` (no
+     filter, searches everything).
+  5. Calls `client.query_points(collection_name=collection, query=query_vec,
+     limit=k, query_filter=query_filter, with_payload=True).points`.
+  6. Converts each point into a flat
+     `{"id", "text", "metadata", "distance", "score"}` dict: `score` is
+     `point.score`, `distance` is `1 - score`, `id` is the payload's
+     `chunk_id`, and `metadata` is the payload minus `text`/`chunk_id`.
+  7. Sorts by `score` descending (Qdrant already returns results best-first,
+     but this makes the "higher score = better" invariant explicit and
+     stable regardless of the server's internal ordering guarantees).
 - `_print_results(results)` — terminal-friendly renderer: rank, score,
   source file, page, and a 120-character snippet per result.
 - CLI (`main()`): `python -m src.search.semantic_search --query "..." [--k N] [--doc-type TYPE]`.

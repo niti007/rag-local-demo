@@ -20,8 +20,8 @@ rather than a framework black box, so it doubles as a course (see
  └──────────────┘   └───────────────┘   └───────────────┘   └───────┬────────┘
                                                                      │
  ┌──────────────┐   ┌───────────────┐   ┌───────────────┐   ┌───────▼────────┐
- │ 8. UI        │◀──│ 7. GENERATE   │◀──│ 6. RERANK     │◀──│ 5. CHROMA      │
- │ Chainlit chat│   │ OpenRouter    │   │ local cross-  │   │ persistent     │
+ │ 8. UI        │◀──│ 7. GENERATE   │◀──│ 6. RERANK     │◀──│ 5. QDRANT      │
+ │ Chainlit chat│   │ OpenRouter    │   │ local cross-  │   │ server (Docker)│
  │ (retrieve/   │   │ (gpt-4o-mini),│   │ encoder       │   │ vector store   │
  │ rerank/answer│   │ cited answer  │   │ re-scores     │   │ (unified       │
  │ panels)      │   │ or fallback   │   │ shortlist     │   │ collection)    │
@@ -33,7 +33,7 @@ rather than a framework black box, so it doubles as a course (see
 ```
 
 Read left-to-right, top row then bottom row: **generate → extract → chunk →
-embed → Chroma → search → rerank → generate (answer) → UI**. The first four
+embed → Qdrant → search → rerank → generate (answer) → UI**. The first four
 stages ("ingest-time") run once, or whenever the corpus changes; the last
 four ("query-time") run on every user question.
 
@@ -56,6 +56,7 @@ answer generation falls back to a no-LLM "retrieved-context-only" mode.
 ## Prerequisites
 
 - Python 3.12
+- Docker (runs the Qdrant vector database)
 - Windows, macOS, or Linux (paths below assume Windows/PowerShell; Unix
   equivalents are noted)
 
@@ -74,16 +75,20 @@ pip install -r requirements.txt
 cp .env.example .env
 # edit .env and set OPENROUTER_API_KEY=sk-or-...
 
-# 4. Run the full pipeline: generate corpus -> chunk -> embed -> store -> project
+# 4. Start the Qdrant vector database (Docker must be running)
+docker compose up -d
+# dashboard: http://localhost:6333/dashboard
+
+# 5. Run the full pipeline: generate corpus -> chunk -> embed -> store -> project
 python scripts/run_full_pipeline.py
 
-# 5. Launch the chat UI
-chainlit run src/ui/app.py
+# 6. Launch the chat UI
+PYTHONPATH=. chainlit run src/ui/app.py
 # then open the localhost URL Chainlit prints (default http://localhost:8000)
 ```
 
 `scripts/run_full_pipeline.py` generates the synthetic corpus, chunks and
-embeds it (with caching), upserts everything into Chroma, prints collection
+embeds it (with caching), upserts everything into Qdrant, prints collection
 stats, and writes a 2D embedding scatter plot to
 `docs/course/embedding_scatter.html` / `.png`.
 
@@ -98,7 +103,7 @@ Every stage is independently runnable as a module or script:
 ```bash
 python -m src.data_gen.generate_all                          # regenerate the synthetic corpus
 python -m src.ingest.chunk                                   # chunk the corpus, print a summary
-python -m src.store.ingest_to_chroma --reset                  # chunk + embed + upsert (clean rebuild)
+python -m src.store.ingest_to_qdrant --reset                  # chunk + embed + upsert (clean rebuild)
 python -m src.store.inspect --stats                           # collection totals, per doc_type
 python -m src.store.inspect --sample 10 --doc-type pdf        # preview stored chunks
 python -m src.store.inspect --overlap <source_file.pdf>       # visualize chunk-overlap for one file
@@ -116,12 +121,12 @@ python -m src.generate.answer_synthesis --query "..."          # search + rerank
 | `corpus.num_pdfs` / `num_sops` / `num_csvs` / `seed` | Size and reproducibility of the synthetic corpus |
 | `chunking.chunk_size` / `chunk_overlap` | Token-bounded splitter settings (tiktoken `cl100k_base`), default 500 / 100 tokens |
 | `embedding.model` / `dim` / `batch_size` | Local embedding model (`BAAI/bge-small-en-v1.5`, 384-dim) and encode batch size |
-| `vector_store.collection` | Chroma collection name (`cascade_docs`) |
+| `vector_store.collection` / `url` | Qdrant collection name (`cascade_docs`) and server URL (`http://localhost:6333`; `QDRANT_URL` / `QDRANT_API_KEY` in `.env` override, e.g. for Qdrant Cloud) |
 | `search.top_k` | Number of candidates returned by semantic search (default 10) |
 | `rerank.model` / `top_n` | Local cross-encoder model and how many results survive reranking (default 4) |
 | `generation.provider` / `base_url` / `model` / `temperature` / `max_tokens` | OpenRouter chat settings (`openai/gpt-4o-mini`) |
 
-Secrets (just `OPENROUTER_API_KEY`) live in `.env`, loaded by
+Secrets (`OPENROUTER_API_KEY`, plus optional `QDRANT_URL` / `QDRANT_API_KEY` for Qdrant Cloud) live in `.env`, loaded by
 `src/config.get_config()` alongside `config.yaml`.
 
 ## What's in the box
@@ -129,7 +134,8 @@ Secrets (just `OPENROUTER_API_KEY`) live in `.env`, loaded by
 ```
 RAG/
 ├── config.yaml                     # all tunable knobs
-├── .env.example                    # OPENROUTER_API_KEY template
+├── .env.example                    # OPENROUTER_API_KEY (+ optional Qdrant) template
+├── docker-compose.yml              # Qdrant vector database server
 ├── ingest.py                       # project-root convenience CLI
 ├── scripts/run_full_pipeline.py    # one-shot generate -> ingest -> inspect -> project
 ├── src/
@@ -137,7 +143,7 @@ RAG/
 │   ├── data_gen/                   # synthetic PDF/SOP/CSV corpus generation
 │   ├── ingest/                     # extract.py, chunk.py (token-bounded, overlapping)
 │   ├── embed/                      # local_embedder.py, cache.py (on-disk embedding cache)
-│   ├── store/                      # chroma_client.py, ingest_to_chroma.py, inspect.py
+│   ├── store/                      # qdrant_store.py, ingest_to_qdrant.py, inspect.py
 │   ├── search/                     # semantic_search.py
 │   ├── rerank/                     # cross_encoder_rerank.py
 │   ├── generate/                   # openrouter_client.py, answer_synthesis.py
@@ -166,16 +172,16 @@ Coverage:
 - `test_chunk_overlap.py` — the key teaching invariant: a long synthetic document splits into multiple chunks, and consecutive chunks from the same source overlap (verified via both offset ranges and shared tail/head text).
 - `test_cache.py` — `chunk_hash` is deterministic and collision-sensitive to text/model; `EmbeddingCache` round-trips a vector via a temp directory; a missing key returns `None`.
 - `test_embedder.py` *(slow)* — the local embedder returns 384-dim, L2-normalized vectors.
-- `test_search_smoke.py` *(slow)* — `search_and_rerank` against the real populated Chroma store returns non-empty, correctly-shaped results (skips gracefully if the store is empty).
+- `test_search_smoke.py` *(slow)* — `search_and_rerank` against the real populated Qdrant collection returns non-empty, correctly-shaped results (skips gracefully if Qdrant is unreachable or the collection is empty).
 
 ## Verified / validated
 
 This pipeline has been run end-to-end and validated:
 
-- Full pipeline produced **348 chunks** in the Chroma collection `cascade_docs`: **206 pdf / 40 sop / 102 csv**.
+- Full pipeline produced **348 chunks** in the Qdrant collection `cascade_docs`: **206 pdf / 40 sop / 102 csv**.
 - Semantic search + cross-encoder rerank confirmed working against the populated store.
 - Live answer generation via OpenRouter (`openai/gpt-4o-mini`) confirmed working with cited output.
-- Chainlit UI boots clean (`chainlit run src/ui/app.py`).
+- Chainlit UI boots clean (`PYTHONPATH=. chainlit run src/ui/app.py`).
 
 ## Security
 

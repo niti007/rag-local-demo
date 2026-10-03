@@ -34,7 +34,6 @@ class PathsConfig(BaseModel):
     pdfs: Path
     sops: Path
     csvs: Path
-    chroma_db: Path
     embedding_cache: Path
 
 
@@ -61,6 +60,7 @@ class EmbeddingConfig(BaseModel):
 
 class VectorStoreConfig(BaseModel):
     collection: str
+    url: str
 
 
 class SearchConfig(BaseModel):
@@ -100,6 +100,11 @@ class Config(BaseSettings):
     # Secret, read from the OPENROUTER_API_KEY env var (via .env or the shell).
     openrouter_api_key: str | None = Field(default=None)
 
+    # Optional Qdrant overrides, read from QDRANT_URL / QDRANT_API_KEY. Only
+    # needed when pointing at Qdrant Cloud; locally the yaml url is enough.
+    qdrant_url: str | None = Field(default=None)
+    qdrant_api_key: str | None = Field(default=None)
+
 
 def _load_yaml(path: Path) -> dict:
     if not path.exists():
@@ -128,6 +133,12 @@ def get_config() -> Config:
     raw["paths"] = _resolve_paths(raw.get("paths", {}), PROJECT_ROOT)
 
     return Config(**raw)
+
+
+def resolved_qdrant_url() -> str:
+    """Effective Qdrant URL: the QDRANT_URL env value if set, else config.yaml."""
+    cfg = get_config()
+    return cfg.qdrant_url or cfg.vector_store.url
 
 
 def require_openrouter_key() -> str:

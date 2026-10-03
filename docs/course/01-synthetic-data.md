@@ -59,7 +59,7 @@ All generation code lives under `src/data_gen/`:
     docs, e.g. "Account Overdraft Policy") and `MANUAL_TITLES` (8 product
     manuals, e.g. "Mobile Banking App Manual"); each becomes `doc_type`
     `"policy"` or `"manual"` at generation time (note: by the time chunks
-    reach Chroma, `doc_type` is normalized to the coarser `"pdf"` /
+    reach Qdrant, `doc_type` is normalized to the coarser `"pdf"` /
     `"sop"` / `"csv"` used everywhere downstream — see
     `src/ingest/chunk.py:_doc_type_for_path`). Each document gets 2-4
     randomly sampled sections (from `POLICY_SECTIONS` or `MANUAL_SECTIONS`)

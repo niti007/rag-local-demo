@@ -95,12 +95,12 @@ python -m src.ingest.chunk
 ```
 
 This is the centerpiece exercise for this lesson — but `show_overlap`
-requires chunks to already be **in Chroma** (it reads from the collection,
+requires chunks to already be **in Qdrant** (it reads from the collection,
 not from `chunk_all()` directly), so run the ingest pipeline first, then
 inspect overlap for one specific source file:
 
 ```powershell
-python -m src.store.ingest_to_chroma --reset
+python -m src.store.ingest_to_qdrant --reset
 python -m src.store.inspect --overlap 01_policy_account_overdraft_policy.pdf
 ```
 

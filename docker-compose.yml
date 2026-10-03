@@ -1,0 +1,13 @@
+# Local Qdrant vector database for the Cascade Bank RAG demo.
+#   docker compose up -d      # start (REST + dashboard on :6333, gRPC on :6334)
+#   docker compose down       # stop (data persists in ./data/qdrant_storage)
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.19.1
+    container_name: cascade-qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333"   # REST API + web dashboard (http://localhost:6333/dashboard)
+      - "6334:6334"   # gRPC
+    volumes:
+      - ./data/qdrant_storage:/qdrant/storage

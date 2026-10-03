@@ -2,7 +2,7 @@
 Project-root convenience CLI for the RAG teaching demo.
 
 Default behavior: generate the synthetic corpus, then do a clean re-ingest
-into Chroma (reset=True), then print collection stats.
+into Qdrant (reset=True), then print collection stats.
 
 Usage (from project root):
     python ingest.py                 # generate + ingest(reset=True) + stats
@@ -16,7 +16,7 @@ from __future__ import annotations
 import argparse
 
 from src.data_gen.generate_all import generate_all
-from src.store.ingest_to_chroma import ingest_all
+from src.store.ingest_to_qdrant import ingest_all
 from src.store.inspect import print_stats
 
 
@@ -25,7 +25,7 @@ def main() -> None:
     parser.add_argument(
         "--gen-only",
         action="store_true",
-        help="Only generate the synthetic source corpus; skip ingest into Chroma.",
+        help="Only generate the synthetic source corpus; skip ingest into Qdrant.",
     )
     parser.add_argument(
         "--no-reset",

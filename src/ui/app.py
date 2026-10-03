@@ -15,7 +15,7 @@ Commands:
 Design notes:
     - Only `src.config` is imported at module load time. Everything else
       (search, rerank, generate, store.inspect) is imported lazily inside the
-      handlers, so the app still imports cleanly even if the Chroma
+      handlers, so the app still imports cleanly even if the Qdrant
       collection is empty, sentence-transformers models haven't been
       downloaded yet, or OPENROUTER_API_KEY is unset.
     - Heavy / blocking calls (search_and_rerank, synthesize_answer,
@@ -106,7 +106,7 @@ CSVs. Nothing here reflects a real institution.
 Every question you ask runs through three visible stages so you can see exactly \
 what retrieval and reranking are doing to the final answer:
 
-1. **Retrieve** -- bi-encoder semantic search over the local Chroma vector store \
+1. **Retrieve** -- bi-encoder semantic search over the Qdrant vector store \
 (cosine similarity).
 2. **Rerank** -- a cross-encoder re-scores the retrieved shortlist for finer-grained \
 relevance.
@@ -126,7 +126,7 @@ HELP_MD = """\
 
 - Type any question about Cascade Bank's (fictional) policies, procedures, or data \
 to run it through retrieve -> rerank -> generate.
-- `/inspect` -- prints Chroma collection stats (total chunks, counts by doc_type) \
+- `/inspect` -- prints Qdrant collection stats (total chunks, counts by doc_type) \
 and regenerates the 2D embedding scatter plot (UMAP, falls back to TSNE), attaching \
 the PNG here and pointing you to the interactive HTML version.
 - `/help` -- shows this message.
@@ -223,10 +223,20 @@ async def on_settings_update(settings: dict) -> None:
 
 
 async def _handle_inspect() -> None:
-    from src.store.chroma_client import collection_stats
+    from src.store.qdrant_store import collection_stats
     from src.store.inspect import embedding_projection
 
-    stats = await cl.make_async(collection_stats)()
+    try:
+        stats = await cl.make_async(collection_stats)()
+    except RuntimeError as e:
+        # get_client() raises RuntimeError when the Qdrant server is down.
+        await cl.Message(
+            content=(
+                "Could not reach the Qdrant vector store. Start it with "
+                f"`docker compose up -d`, then try `/inspect` again.\n\n`{e}`"
+            )
+        ).send()
+        return
 
     lines = [
         "### Vector store inspection",

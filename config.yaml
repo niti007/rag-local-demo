@@ -35,8 +35,8 @@ rerank:
   top_n: 4
 
 generation:
-  provider: openrouter
-  base_url: https://openrouter.ai/api/v1
-  model: openai/gpt-4o-mini
+  provider: openai
+  base_url: https://api.openai.com/v1
+  model: gpt-4o-mini
   temperature: 0.2
   max_tokens: 800

@@ -5,12 +5,12 @@ Loads `config.yaml` (project settings) and `.env` (secrets) and exposes a
 single, typed, cached settings object via `get_config()`.
 
 Usage:
-    from src.config import get_config, require_openrouter_key
+    from src.config import get_config, require_openai_key
 
     cfg = get_config()
     cfg.paths.pdfs          # -> absolute pathlib.Path
     cfg.embedding.model     # -> "BAAI/bge-small-en-v1.5"
-    require_openrouter_key()  # raises RuntimeError with a clear message if unset
+    require_openai_key()    # raises RuntimeError with a clear message if unset
 """
 
 from __future__ import annotations
@@ -97,7 +97,10 @@ class Config(BaseSettings):
     rerank: RerankConfig
     generation: GenerationConfig
 
-    # Secret, read from the OPENROUTER_API_KEY env var (via .env or the shell).
+    # Secret, read from the OPENAI_API_KEY env var (via .env or the shell).
+    openai_api_key: str | None = Field(default=None)
+
+    # Backward-compatible alias for older OpenRouter-based setups.
     openrouter_api_key: str | None = Field(default=None)
 
     # Optional Qdrant overrides, read from QDRANT_URL / QDRANT_API_KEY. Only
@@ -141,16 +144,23 @@ def resolved_qdrant_url() -> str:
     return cfg.qdrant_url or cfg.vector_store.url
 
 
-def require_openrouter_key() -> str:
+def require_openai_key() -> str:
     """
-    Return the OpenRouter API key, or raise a clear RuntimeError if it is missing.
-    Use this right before making an OpenRouter API call.
+    Return the OpenAI API key, or raise a clear RuntimeError if it is missing.
+    Accepts `OPENAI_API_KEY`, and also the older `OPENROUTER_API_KEY` value for
+    backward compatibility.
     """
     cfg = get_config()
-    if not cfg.openrouter_api_key:
+    api_key = cfg.openai_api_key or cfg.openrouter_api_key
+    if not api_key:
         raise RuntimeError(
-            "OPENROUTER_API_KEY is not set. Copy .env.example to .env and set "
-            "OPENROUTER_API_KEY to a key from https://openrouter.ai/keys, "
+            "OPENAI_API_KEY is not set. Copy .env.example to .env and set "
+            "OPENAI_API_KEY to a key from https://platform.openai.com/api-keys, "
             "or export it as an environment variable."
         )
-    return cfg.openrouter_api_key
+    return api_key
+
+
+def require_openrouter_key() -> str:
+    """Backward-compatible alias for older code paths."""
+    return require_openai_key()

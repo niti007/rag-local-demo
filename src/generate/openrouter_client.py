@@ -1,13 +1,11 @@
 """
-OpenRouter client wrapper for the Cascade Bank local-first RAG teaching demo.
+OpenAI client wrapper for the Cascade Bank local-first RAG teaching demo.
 
-OpenRouter exposes an OpenAI-compatible chat completions API, so we reuse the
-`openai` v1 SDK and just point it at OpenRouter's base_url with an OpenRouter
-API key.
+Uses the OpenAI API with an OpenAI API key for chat completions.
 
-Import-safety note: this module must be importable even when OPENROUTER_API_KEY
+Import-safety note: this module must be importable even when OPENAI_API_KEY
 is not set (e.g. during offline/answer-only-mode demos or plain `import` for
-type-checking). `require_openrouter_key()` is therefore only called lazily,
+type-checking). `require_openai_key()` is therefore only called lazily,
 inside `get_client()`, never at module import time.
 """
 
@@ -18,17 +16,17 @@ from typing import Any, Iterable
 from openai import APIConnectionError, InternalServerError, OpenAI, RateLimitError
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
-from src.config import get_config, require_openrouter_key
+from src.config import get_config, require_openai_key
 
 _client: OpenAI | None = None
 
 
 def get_client() -> OpenAI:
     """
-    Build (and cache) an OpenAI SDK client pointed at OpenRouter.
+    Build (and cache) an OpenAI SDK client.
 
-    Reads `cfg.generation.base_url` for the endpoint and requires
-    OPENROUTER_API_KEY (via `require_openrouter_key()`) for auth. The key is
+    Reads `cfg.generation.base_url` for the endpoint (defaults to OpenAI's API)
+    and requires OPENAI_API_KEY (via `require_openai_key()`) for auth. The key is
     only fetched here -- not at import time -- so this module stays
     import-safe without a key present.
     """
@@ -36,12 +34,8 @@ def get_client() -> OpenAI:
     if _client is None:
         cfg = get_config()
         _client = OpenAI(
-            base_url=cfg.generation.base_url,
-            api_key=require_openrouter_key(),
-            default_headers={
-                "HTTP-Referer": "http://localhost",
-                "X-Title": "Cascade Bank RAG Demo",
-            },
+            base_url=cfg.generation.base_url or "https://api.openai.com/v1",
+            api_key=require_openai_key(),
         )
     return _client
 
@@ -67,7 +61,7 @@ def chat_completion(
     stream: bool = False,
 ) -> str | Iterable:
     """
-    Call OpenRouter's chat completions endpoint, falling back to
+    Call OpenAI's chat completions endpoint, falling back to
     `cfg.generation.*` for any unset arguments.
 
     Retries transient errors (connection issues, rate limits, 5xx) up to 4

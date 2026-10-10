@@ -41,6 +41,15 @@ message) that surfaces the same `collection_stats()` and
 session — trainees don't have to leave the UI and drop to a terminal to
 see collection totals or the 2D embedding scatter.
 
+**Light / dark theme.** Chainlit 2.x ships a theme toggle in the chat
+header with Light, Dark and System options, so the UI needs no custom CSS
+or code for it. On a first visit the theme follows the operating system's
+`prefers-color-scheme`; once a visitor picks an option, the choice is saved
+per browser in `localStorage` and survives reloads. Setting `default_theme`
+under `[UI]` in `.chainlit/config.toml` would override the OS default for
+first-time visitors, so this repo leaves it unset. This is also why
+`requirements.txt` pins `chainlit>=2.0,<3`.
+
 ## In this repo
 
 `src/ui/app.py`:

@@ -37,6 +37,10 @@ Open the gear icon above the chat box to adjust:
 - **use_rerank** -- turn cross-encoder reranking on/off.
 - **doc_type** -- restrict retrieval to `pdf`, `sop`, `csv`, or `all`.
 
+## Theme
+
+Use the Light / Dark / System toggle in the top-right header to switch themes. It follows your OS setting on first visit and remembers your choice in this browser.
+
 ## One-key note
 
 Set `OPENROUTER_API_KEY` in a `.env` file at the project root (see
